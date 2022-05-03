@@ -1,0 +1,272 @@
+{% load static %}
+<html lang="en">
+
+<head>
+  <title>Kanmey Lms</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  {% comment %}
+  <!-- <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900" rel="stylesheet"> -->
+
+  <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"> -->
+
+  {% endcomment %}
+
+  <link rel="stylesheet" href="{% static 'style.css' %}">
+  <link rel="stylesheet" href="{% static 'sidebar.css' %}">
+  <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+  <link rel="stylesheet" href="{% static 'css/bootstrap-grid.min.css' %}">
+  <link href='https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css' rel='stylesheet'>
+  <!-- CSS only -->
+  <script src="{% static 'js/jquery-min.js' %}"></script>
+
+  <script src="{% static 'js/popper.js' %}"></script>
+  <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+
+
+  <style>
+    hr {
+      background-color: white;
+    }
+
+    .scroll ::-webkit-scrollbar {
+      width: 2px;
+      height: 1px;
+    }
+
+    .scroll ::-webkit-scrollbar-track {
+      background-color: #6c757d;
+    }
+
+    .scroll ::-webkit-scrollbar-thumb {
+      background-color: #6c757d;
+    }
+
+    .scroll ::-webkit-scrollbar-thumb:hover {
+      background-color: #6c757d;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="sidebar">
+    <div class="logo_content">
+      <div class="logo">
+        <i class='bx bxl-kickstarter'></i>
+        <div class="logo_name">
+          anemy Lms
+        </div>
+        <br>
+
+      </div>
+      <i class='bx bx-menu' id="btn"></i>
+    </div>
+    <ul class="nav_list">
+<hr>
+      <li>
+
+        <a href="{% url 'instructor_home' %}">
+          <i class='bx bxs-home'></i>
+          <span class="links_name">Home</span>
+        </a>
+        <span class="tooltip">Home</span>
+        <hr>
+
+      </li>
+
+
+      <li>
+        <a href="{% url 'Schedule_home' %}">
+          <i class='bx bx-table'></i>
+          <span class="links_name">Schedule</span>
+        </a>
+        <span class="tooltip">Schedule</span>
+        <hr>
+
+      </li>
+
+      
+      <li>
+        <a href="#">
+          <i class='bx bx-cog'></i>
+          <span class="links_name">Setting</span>
+        </a>
+        <span class="tooltip">Setting</span>
+<hr>
+      </li>
+
+
+    </ul>
+    <div class="profile_content">
+      <div class="profile">
+        <div class="profile_details">
+          <img src="https://icon-library.com/images/white-profile-icon/white-profile-icon-24.jpgPrifile" alt="">
+          <div class="name_job">
+            <div class="name">Ahmed Ibrahim</div>
+            <div class="job">Web Developer</div>
+          </div>
+        </div>
+        <i class='bx bx-log-out' id="log_out"></i>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrapper d-flex align-items-stretch home_content">
+
+
+    <!-- Page Content  -->
+    <div id="content" class=" ">
+
+      <header>
+        <center>
+          <div class="px-3 py-2  btn-dark btn bg-dark text-white">
+            <div class="container">
+              <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+
+
+                <ul class="nav col-12 col-lg-auto my-2 justify-content-center my-md-0 text-small">
+                  <li>
+                    <a href="{% url 'instructor_home' %}" class="nav-link text-secondary">
+                      Home
+                    </a>
+                  </li>
+
+                  <li>
+                    <div class="dropdown ">
+                      <button class="btn dropdown-toggle nav-link text-white " type="button" id="triggerId"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Schedule
+                      </button>
+                      <div class="dropdown-menu" aria-labelledby="triggerId">
+
+                        {% for instructor_Schedule in instructor_Schedule %}
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item"
+                          href="{% url 'Schedule_Instructor' instructor_Schedule.instructor_schedule_name %}">
+                          {{instructor_Schedule.instructor_schedule_name}}</a>
+                        <div class="dropdown-divider"></div>
+                        {% endfor %}
+
+
+                      </div>
+                    </div>
+                  </li>
+                  <li>
+                    <a href="{% url 'Settings' %}" class="nav-link text-white">
+                      Settings
+                    </a>
+                  </li>
+                  <li>
+
+                  </li>
+
+
+                </ul>
+                <div class=" text-end">
+                  <ul class="nav ">
+                    <li class="nav-item"><a href="{% url 'logout-view' %}" class="nav-link link-dark px-2">Log Out</a></li>
+
+                  </ul>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </center>
+        <div class="px-3 py-2 border-bottom mb-3">
+          <div class="container d-flex flex-wrap justify-content-center">
+
+
+            <div class="text-end">
+              <center><b>welcome {{user.instructor_type}} : {{user.first_name }} {{ user.last_name}} </b></center>
+            </div>
+
+          </div>
+        </div>
+      </header>
+      <div id="content" class="  row  justify-content-center  ">
+
+        <div id="requestcompanymass" class="  row  justify-content-center  row  justify-content-center  " style="overflow-x: hidden;  padding: 5px; margin: 10px auto;
+         
+          ">
+          {% for instructor_Schedule in instructor_Schedule %}
+
+
+          <div class="card text-white bg-dark mb-3" style="max-width: 18rem;height: 250px; margin: 2px;">
+            <div class="card-header d-flex justify-content-center py-4 text-white "><a class=" text-white btn-link"
+                href="{% url 'Schedule_Instructor' instructor_Schedule.instructor_schedule_name %}">
+                {{instructor_Schedule.instructor_schedule_name}}</a></a></div>
+            <div class="card-body">
+              <h5 class="card-title">Dark card title</h5>
+              <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's
+                content.</p>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+        <div id="requestcompany" style="display: inline;">
+
+
+
+
+        </div>
+
+        <!-- <div class="dropdown-divider"></div> -->
+
+
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <script>
+    let btn = document.querySelector('#btn')
+    let sidebar = document.querySelector('.sidebar')
+
+    btn.onclick = function () {
+      sidebar.classList.toggle('active')
+    }
+    function schedule(data) {
+
+      if (data == null) {
+        $.ajax({
+          url: window.location.origin + "/instructor/Schedule",
+
+          success: function (req) {
+            $("#requestcompany").html(req)
+          }
+
+        });
+      } else if (data == "data") {
+        var d = {
+          "get": "submit_schedule",
+          "Schedule_Name": $("#Schedule_Name").val(),
+          "instructor_schedule_name": $("#instructor_schedule_name").val(),
+          "student_schedule_name": $("#student_schedule_name").val(),
+          "course_name": $("#course_name").val(),
+          "quiz_name": $("#quiz_name").val(),
+          "task_name": $("#task_name").val(),
+          "material_name": $("#material_name").val(),
+          "post_title": $("#post_title").val(),
+        }
+        $.ajax({
+          url: window.location.origin + "/instructor/Schedule",
+          data: d,
+          dataType: "json",
+          success: function (req) {
+            $("#requestcompany").html(req)
+          }
+
+        });
+      }
+
+    }
+
+  </script>
+</body>
+
+</html>

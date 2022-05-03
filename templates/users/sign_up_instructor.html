@@ -1,0 +1,98 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Sign up | instructor</title>
+
+		<link rel="stylesheet" href="{% static 'css/in-account.css' %}" />
+        <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+
+
+	</head>
+	<body style="background-image: url('{% static "photo/SignUPBG.png" %}');">
+
+		{% include "header.html" %}
+
+		<div class="container">
+
+			<div class="inp-login">
+				<p>
+					Have A Nice Registration Master
+				</p>
+				<div class="vl"></div>
+			</div> <!-- ./inp-login -->
+	
+	
+	
+			<div class="inp-login">
+				<div class="in-container">
+					<h2> Instructor Acount ... </h2> <br>
+
+					<form action="" method="post">{% csrf_token %}
+						<label> <b> FirstName </b> <br /> </label>
+						<input class="inp-account" name="first_name" placeholder="  first name....." required/>
+		
+						<br>
+						<label> <b> LastName </b> <br /> </label>
+						<input class="inp-account" name="last_name" placeholder="  last name......" required/>
+		
+						<br>
+						<label> <b> UsserName </b> <br /> </label>
+						<input class="inp-account" name="username" placeholder="  username......" required/>
+		
+						<br>
+						<label> <b> Email </b> <br /> </label>
+						<input class="inp-account" name="email" placeholder="   example@gmail.com" required/>
+						<br>
+		
+						<div id="div1">
+						</div>
+						<input class="but-submit" type="button" id="btn1" value="continuos"></input>
+
+						<button type="submit" class="but-submit" id="btn2" hidden>Sign up</button>
+					</form>
+	
+	
+	
+					
+	
+	
+					<div class="marg-submit">
+	
+						<h3 class="marg-submit-h3"> Already have an account ? <a href="{% url 'login-view' company_name type_user %}"> signln </a> </h3>
+	
+					</div>
+	
+				</div>
+	
+			</div>
+	
+		</div>
+
+		<script>
+			document.getElementById('btn1').addEventListener('click', function () {
+				document.getElementById('div1').innerHTML = `
+	
+						<label><b> password  </b> <br /> </label>
+						<input class="inp-account" name="password" placeholder="  *********** " required/>
+	
+						<br>
+						<label> <b> Re-Enterpassword </b> <br /> </label>
+						<input class="inp-account" name="confirm_password" placeholder="  ********** " required/>
+					   
+						<br>
+						<label> <b> Department </b> <br /> </label>
+						<input class="inp-account" name="department" placeholder="  department......" required/>
+					  
+				`
+			document.getElementById('btn1').setAttribute('hidden', '')
+			document.getElementById('btn2').removeAttribute('hidden')
+
+			})
+		</script>
+		
+	</body>
+</html>

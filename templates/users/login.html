@@ -1,0 +1,82 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title> LMS </title>
+        <!-- css files -->
+        <link rel="stylesheet" href="{% static 'css/in-account.css' %}" />
+
+        <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+		<link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+        <link rel="stylesheet" href="{% static 'css/contact_.css' %}">
+		<script src="{% static 'js/jquery-min.js' %}"></script>
+
+
+
+
+    </head>
+    <body style="background-image: url('{% static "photo/LoginInBG.png" %}');">
+
+        {% include "navbar.html" %}
+        
+        <div class="container">
+
+            <div class="inp-login">
+                <p>
+                    Welcom to back
+                </p>
+                <div class="vl"></div>
+            </div> <!-- ./inp-login -->
+
+
+            <div class="inp-login">
+                <div class="in-container">
+                    <h2> My Account ... </h2> <br>
+
+                    <form method="post">{% csrf_token %}
+
+                        <label><b> UserName / Email </b> <br /> </label>
+                        <input class="inp-account" name="username" placeholder=" ex : mard  " required/>
+
+                        <br>
+                        <label><b> password </b> <br /> </label>
+                        <input type="password" class="inp-account" name="password" placeholder=" ***** " required/>
+
+                        <span> <a href="Forgot-Pass.html"> Forgot My Password ! </a> </span>
+
+                        <button class="but-submit" type="submit">Login</button>
+
+                    </form>
+
+                    {% if if_company_sign and not if_parent_type %}
+                        <div class="marg-submit">
+                            {% if type_user == 'doctor' or type_user == 'assistant' or type_user == 'trainer' %}
+
+                                <h3 class="marg-submit-h3"> Don't have an account ? <a href="{% url 'signup-ins-view' company_name type_user %}"> Sign up </a> </h3>
+
+                            {% elif type_user == 'student' %}
+
+                                <h3 class="marg-submit-h3"> Don't have an account ? <a href="{% url 'signup-stu-view' company_name type_user %}"> Sign up </a> </h3>
+
+                            {% endif %}
+
+                        </div>
+                    {% endif %}
+
+                </div> 
+
+            </div>
+
+        </div>
+
+        <script>
+            window.onload = function(){
+				$('#comp').addClass('now')
+			}
+        </script>
+
+    </body>
+</html>

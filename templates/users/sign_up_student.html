@@ -1,0 +1,104 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Sign up | student</title>
+
+		<link href="https://fonts.googleapis.com/css2?family=Varela+Round&display=swap" rel="stylesheet">
+		<link rel="stylesheet" href="{% static 'css/st-account.css' %}">
+	</head>
+	<body style="background-image: url('{% static "photo/BG-Student.png" %}');">
+		
+
+		{% include "header.html" %}
+
+		<div class="container">
+			<h2> Student account ... </h2> <br> <br>
+	
+			<form action="" method="post">{% csrf_token %}
+				<label> <b> FirstName </b> <br /> </label>
+				<input class="inp-st-account" name="first_name" placeholder=" first_name...." required/>
+		
+				<br>
+				<label> <b> LastName </b> <br /> </label>
+				<input class="inp-st-account" name="last_name" placeholder=" last_name...." required/>
+		
+				<br>
+				<label> <b> UsserName </b> <br /> </label>
+				<input class="inp-st-account" name="username" placeholder=" username....." required/>
+		
+				<br>
+				<label> <b> Email </b> <br /> </label>
+				<input class="inp-st-account" name="email" placeholder=" example@gmail.com" required/>
+		
+				<br>
+				<label><b> password </b> <br /> </label>
+				<input type="password" class="inp-st-account" name="password" placeholder=" *********** " required/>
+		
+				<br>
+				<label> <b> ReEnterpassword </b> <br /> </label>
+				<input type="password" class="inp-st-account" name="confirm_password" placeholder=" ********** " required/>
+		
+				<br>
+		
+				<div id="div1">
+		
+				</div>
+		
+				<input class="but-submit" type="button" id="btn1" value="continuos"></input>
+				<button class="but-submit" type="submit" id="btn2" hidden>Sign up</input>
+
+			</form>
+			
+	
+		</div> 
+	
+		<div class="marg-submit">
+	
+			<h3 class="marg-submit-h3"> Already have an account ? <a href="{% url 'login-view' company_name type_user %}"> signln </a> </h3>
+	
+		</div>
+	
+	
+	
+		<script>
+			document.getElementById('btn1').addEventListener('click', function () {
+				document.getElementById('div1').innerHTML = `
+	
+							<label> <b> Age </b> <br /> </label>
+							<input class="inp-st-account" name="age" placeholder=" age..." required/>
+						  
+							<br>
+							<label> <b> gender </b> <br /> </label>
+							<input class="inp-st-account" name="gender" placeholder=" gender..." required/>
+		
+							<br>  
+							<label><b> Department  </b> <br /> </label>
+							<input class="inp-st-account" name="department" placeholder=" department.... " required/>
+	
+							<br>
+							<label> <b> NationalID </b> <br /> </label>
+							<input class="inp-st-account" name="national_id" placeholder=" 200000999995551113 " required/>
+						
+							<br>
+							<label> <b> ParentsNationalID </b> <br /> </label>
+							<input class="inp-st-account" name="parent_national_id" placeholder=" 200000999995551113" required/>
+						
+							<br>
+							<label> <b> ParentsEmail </b> <br /> </label>
+							<input type="email" class="inp-st-account" name="parent_email" placeholder=" example@gmail.com" required/>
+	
+							<br>
+	
+					`
+
+					document.getElementById('btn1').setAttribute('hidden','')
+					document.getElementById('btn2').removeAttribute('hidden')
+
+			})
+		</script>
+	</body>
+</html>
