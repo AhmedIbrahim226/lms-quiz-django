@@ -32,8 +32,15 @@ def quiz_view(request, schedule_name):
     context['all_quizes'] = all_quizes
     context['quiz_list'] = [int(q.id) for q in all_quizes]
 
+    try:
+        if request.user.instructor_type:
+            return render(request, 'quiz/quiz_view.html', context=context)
+    except:
+        if request.user.id_college:
+            return render(request, 'quiz/quiz_view_st.html', context=context)
 
-    return render(request, 'quiz/quiz_view.html', context=context)
+    
+    
 
 def check_quiz_code_response(request):
     quiz_code = request.GET.get('quiz_code')

@@ -107,9 +107,9 @@ WSGI_APPLICATION = 'core.wsgi.application'
 ASGI_APPLICATION = 'core.asgi.application'
 
 CELERY_BROKER_URL = 'redis://127.0.0.1:6379'
-# CELERY_ACCEPT_CONTENT = ['pickle']
-# CELERY_RESULT_SERIALIZER = 'pickle'
-# CELERY_TASK_SERIALIZER = 'pickle'
+CELERY_ACCEPT_CONTENT = ['pickle']
+CELERY_RESULT_SERIALIZER = 'pickle'
+CELERY_TASK_SERIALIZER = 'pickle'
 
 
 CHANNEL_LAYERS = {
