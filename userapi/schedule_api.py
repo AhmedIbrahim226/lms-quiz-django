@@ -10,10 +10,6 @@ from .schedule_serializers import (
     GetCourse, GetMaterialVideo, GetTaskInstructor
 )
 
-from users.models import (
-    InstructorAccount
-)
-
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import permissions

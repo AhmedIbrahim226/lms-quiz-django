@@ -66,17 +66,51 @@
                         </div>
                     {% endif %}
 
+
                 </div> 
 
             </div>
 
         </div>
+        <button id="btn_error" hidden type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+        </button>
 
-        <script>
-            window.onload = function(){
-				$('#comp').addClass('now')
-			}
-        </script>
+        {% if error_login %}
+            <script>
+                window.onload = function (){
+                    $('#comp').addClass('now')
+                    document.getElementById('btn_error').click()
+                }
+            </script>
+        {% endif %}
 
+        <!-- Modal -->
+        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Failure occurred!</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body text-center">
+                  <b class="text-danger">
+                      Error! {{ error_login }}
+                  </b>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-danger btn-sm" data-bs-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {% if not error_login %}
+            <script>
+                window.onload = function(){
+                    $('#comp').addClass('now')
+                }
+            </script>
+        {% endif %}
+        <script src="{% static 'js/bootstrap.bundle.min.v5.js' %}"></script>
     </body>
 </html>

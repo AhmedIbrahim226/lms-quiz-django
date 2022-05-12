@@ -77,223 +77,260 @@ def type_view(request, *args, **kwargs):
 
 def login_view(request, company_name, type_user):
     if_company_sign = Company.objects.get(company_name=company_name)
-    
+
     parent_type = False
     if type_user == 'parent':
         parent_type = True
-    
+
+    context = {
+        'if_company_sign': if_company_sign.is_sign_up,
+        'company_name': company_name,
+        'if_parent_type': parent_type,
+        'type_user': type_user
+    }
+
     if request.method == 'POST':
-        
+
         get_username_or_email = request.POST.get('username')
-        password              = request.POST.get('password')
-        
+        password = request.POST.get('password')
+
         if type_user == 'admin':
             if AdminAccount.objects.filter(email=get_username_or_email).exists():
-                
+
                 user_check = AdminAccount.objects.get(email=get_username_or_email)
-                user       = authenticate(username=user_check.username, password=password)
-                                    
+                user = authenticate(username=user_check.username, password=password)
+
                 if user is not None:
                     if user.company_name == company_name:
                         print('admin with email logined')
-                        
+
                         login(request, user)
                         return redirect("home_admin")
                     else:
+                        context['error_login'] = 'You can\'t login in this company'
                         print('You can\'t login in this company')
                 else:
+                    context['error_login'] = 'email or password not correct!'
                     print('email or password not correct!')
-                
+
             elif AdminAccount.objects.filter(username=get_username_or_email).exists():
-                
+
                 user_check = AdminAccount.objects.get(username=get_username_or_email)
-                user       = authenticate(username=user_check.username, password=password)
-                
+                user = authenticate(username=user_check.username, password=password)
+
                 if user is not None:
                     if user.company_name == company_name:
                         print('admin logined')
                         login(request, user)
                         return redirect("home_admin")
                     else:
+                        context['error_login'] = 'You can\'t login in this company'
                         print('You can\'t login in this company')
                 else:
+                    context['error_login'] = 'username or password not correct!'
                     print('username or password not correct!')
-            
+
             else:
+                context['error_login'] = 'Can\'t login, you are\'t admin!'
                 print('Can\'t login, you are\'t admin!')
 
         elif type_user == 'doctor':
             if InstructorAccount.objects.filter(email=get_username_or_email, instructor_type=type_user).exists():
-                
+
                 user_check = InstructorAccount.objects.get(email=get_username_or_email)
-                user       = authenticate(username=user_check.username, password=password)
-                
+                user = authenticate(username=user_check.username, password=password)
+
                 if user is not None:
                     if user.company_name == company_name:
                         print('doctor with email logined')
                         login(request, user)
                         return redirect("instructor_home")
                     else:
+                        context['error_login'] = 'You can\'t login in this company'
                         print('You can\'t login in this company')
                 else:
+                    context['error_login'] = 'email or password not correct!'
                     print('email or password not correct!')
-                    
+
             elif InstructorAccount.objects.filter(username=get_username_or_email, instructor_type=type_user).exists():
-                
+
                 user_check = InstructorAccount.objects.get(username=get_username_or_email)
-                user       = authenticate(username=user_check.username, password=password)
-                
+                user = authenticate(username=user_check.username, password=password)
+
                 if user is not None:
                     if user.company_name == company_name:
                         print('doctor logined')
                         login(request, user)
                         return redirect("instructor_home")
                     else:
+                        context['error_login'] = 'You can\'t login in this company'
                         print('You can\'t login in this company')
                 else:
+                    context['error_login'] = 'username or password not correct!'
                     print('username or password not correct!')
-            
+
             else:
+                context['error_login'] = 'Can\'t login, you are\'t doctor!'
                 print('Can\'t login, you are\'t doctor!')
-                    
+
         elif type_user == 'assistant':
             if InstructorAccount.objects.filter(email=get_username_or_email, instructor_type=type_user).exists():
-                
+
                 user_check = InstructorAccount.objects.get(email=get_username_or_email)
-                user       = authenticate(username=user_check.username, password=password)
-                
+                user = authenticate(username=user_check.username, password=password)
+
                 if user is not None:
                     if user.company_name == company_name:
                         print('assistant with email logined')
                         login(request, user)
                         return redirect("instructor_home")
                     else:
+                        context['error_login'] = 'You can\'t login in this company'
                         print('You can\'t login in this company')
                 else:
+                    context['error_login'] = 'email or password not correct!'
                     print('email or password not correct!')
-                    
+
             elif InstructorAccount.objects.filter(username=get_username_or_email, instructor_type=type_user).exists():
-                
+
                 user_check = InstructorAccount.objects.get(username=get_username_or_email)
-                user       = authenticate(username=user_check.username, password=password)
-                
+                user = authenticate(username=user_check.username, password=password)
+
                 if user is not None:
                     if user.company_name == company_name:
                         print('assistant logined')
                         login(request, user)
                         return redirect("instructor_home")
                     else:
+                        context['error_login'] = 'You can\'t login in this company'
                         print('You can\'t login in this company')
                 else:
+                    context['error_login'] = 'username or password not correct!'
                     print('username or password not correct!')
 
 
             else:
+                context['error_login'] = 'Can\'t login, you are\'t assistant!'
                 print('Can\'t login, you are\'t assistant!')
 
         elif type_user == 'trainer':
             if InstructorAccount.objects.filter(email=get_username_or_email, instructor_type=type_user).exists():
-                
+
                 user_check = InstructorAccount.objects.get(email=get_username_or_email)
-                user       = authenticate(username=user_check.username, password=password)
-                
+                user = authenticate(username=user_check.username, password=password)
+
                 if user is not None:
                     if user.company_name == company_name:
                         print('trainer with email logined')
                         login(request, user)
                         return redirect("instructor_home")
                     else:
+                        context['error_login'] = 'You can\'t login in this company'
                         print('You can\'t login in this company')
                 else:
+                    context['error_login'] = 'email or password not correct!'
                     print('email or password not correct!')
-                    
+
             elif InstructorAccount.objects.filter(username=get_username_or_email, instructor_type=type_user).exists():
-                
+
                 user_check = InstructorAccount.objects.get(username=get_username_or_email)
-                user       = authenticate(username=user_check.username, password=password)
-                
+                user = authenticate(username=user_check.username, password=password)
+
                 if user is not None:
                     if user.company_name == company_name:
                         print('trainer logined')
                         login(request, user)
                         return redirect("instructor_home")
                     else:
+                        context['error_login'] = 'You can\'t login in this company'
                         print('You can\'t login in this company')
                 else:
+                    context['error_login'] = 'username or password not correct!'
                     print('username or password not correct!')
-            
+
             else:
+                context['error_login'] = 'Can\'t login, you are\'t trainer!'
                 print('Can\'t login, you are\'t trainer!')
 
         elif type_user == 'student':
             if StudentAccount.objects.filter(email=get_username_or_email).exists():
-                
+
                 user_check = StudentAccount.objects.get(email=get_username_or_email)
-                user       = authenticate(username=user_check.username, password=password)
-                
+                user = authenticate(username=user_check.username, password=password)
+
                 if user is not None:
                     if user.company_name == company_name:
                         print('student with email logined')
                         login(request, user)
                         return redirect("student_home")
                     else:
+                        context['error_login'] = 'You can\'t login in this company'
                         print('You can\'t login in this company')
                 else:
+                    context['error_login'] = 'email or password not correct!'
                     print('email or password not correct!')
-                    
+
             elif StudentAccount.objects.filter(username=get_username_or_email).exists():
-                
+
                 user_check = StudentAccount.objects.get(username=get_username_or_email)
-                user       = authenticate(username=user_check.username, password=password)
-                
+                user = authenticate(username=user_check.username, password=password)
+
                 if user is not None:
                     if user.company_name == company_name:
                         print('student logined')
                         login(request, user)
                         return redirect("student_home")
                     else:
+                        context['error_login'] = 'You can\'t login in this company'
                         print('You can\'t login in this company')
                 else:
+                    context['error_login'] = 'username or password not correct!'
                     print('username or password not correct!')
-            
+
             else:
+                context['error_login'] = 'Can\'t login, you are\'t student!'
                 print('Can\'t login, you are\'t student!')
 
         elif type_user == 'parent':
             if ParentAccount.objects.filter(email=get_username_or_email).exists():
-                
+
                 user_check = ParentAccount.objects.get(email=get_username_or_email)
-                user       = authenticate(username=user_check.username, password=password)
-                
+                user = authenticate(username=user_check.username, password=password)
+
                 if user is not None:
                     if user.company_name == company_name:
                         print('parent with email logined')
                         login(request, user)
                         return redirect("parent_home")
                     else:
+                        context['error_login'] = 'You can\'t login in this company'
                         print('You can\'t login in this company')
                 else:
+                    context['error_login'] = 'email or password not correct!'
                     print('email or password not correct!')
             elif ParentAccount.objects.filter(username=get_username_or_email).exists():
-                
+
                 user_check = ParentAccount.objects.get(username=get_username_or_email)
-                user       = authenticate(username=user_check.username, password=password)
-                
+                user = authenticate(username=user_check.username, password=password)
+
                 if user is not None:
                     if user.company_name == company_name:
                         print('parent logined')
                         login(request, user)
                         return redirect("parent_home")
                     else:
+                        context['error_login'] = 'You can\'t login in this company'
                         print('You can\'t login in this company')
                 else:
+                    context['error_login'] = 'username or password not correct!'
                     print('username or password not correct!')
-            
+
             else:
+                context['error_login'] = 'Can\'t login, you are\'t parent!'
                 print('Can\'t login, you are\'t parent!')
 
-
-    return render(request, 'users/login.html', context={'if_company_sign': if_company_sign.is_sign_up, 'if_parent_type': parent_type, 'company_name': company_name, 'type_user': type_user})
+    return render(request, 'users/login.html',
+                  context=context)
 
 
 def sign_up_instructor_view(request, *args, **kwargs):
