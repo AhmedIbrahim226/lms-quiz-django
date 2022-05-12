@@ -351,18 +351,18 @@ def sign_up_instructor_view(request, *args, **kwargs):
             confirm_password = request.POST.get("confirm_password")
 
             if utilities.username_exists(username=username):
-                context['username_error'] = 'This username exists!'
+                context['error'] = 'This username exists!'
 
             elif utilities.email_exists(email=email):
-                context['email_error'] = 'This email exists!'
+                context['error'] = 'This email exists!'
 
             expert_password = re.findall("[a-zA-Z]", password)
             if len(password) < 8:
-                context['error_pass'] = 'Your password must contain at least 8 characters.'
+                context['error'] = 'Your password must contain at least 8 characters.'
             elif not expert_password:
-                context['error_pass'] = 'Your password can’t be entirely numeric.'
+                context['error'] = 'Your password can’t be entirely numeric.'
             elif confirm_password != password:
-                context['error_pass'] = 'Your passwords not same!.'
+                context['error'] = 'Your passwords not same!.'
 
             else:
                 user = InstructorAccount.objects.create_user(
