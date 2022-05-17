@@ -5,28 +5,60 @@
   <title>Kanemy Lms </title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  {% comment %}
-  <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900" rel="stylesheet">
 
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 
-  {% endcomment %}
- 
   <link rel="stylesheet" href="{% static 'style.css' %}">
   <link rel="stylesheet" href="{% static 'sidebar.css' %}">
   <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+          <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.1.1/css/all.css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+    integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
 
   <link href='https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css' rel='stylesheet'>
   <!-- CSS only -->
   <script src="{% static 'js/jquery-min.js' %}"></script>
-  
+
   <script src="{% static 'js/popper.js' %}"></script>
   <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
   <style>
+
+.ul.breadcrumb {
+        border-radius: 0px;
+  padding: 10px 16px;
+  list-style: none;
+  background-color: #11101d;
+}
+
+      .ul.breadcrumb .li {
+  display: inline;
+  font-size: 18px;
+  color:rgb(69, 171, 255) ;
+}
+
+/* Add a slash symbol (/) before/behind each list item */
+.ul.breadcrumb .li+.li:before {
+  padding: 8px;
+  color: rgb(255, 251, 251);
+  content: "/\00a0";
+}
+
+/* Add a color to all links inside the list */
+.ul.breadcrumb .li .a {
+  color: #ffffff;
+  text-decoration: none;
+}
+
+/* Add a color on mouse-over */
+.ul.breadcrumb .li .a:hover {
+  color: #b3d6f4;
+  text-decoration: underline;
+}
+
     .scroll ::-webkit-scrollbar {
       width: 2px;
       height: 1px;
     }
+
 
     .scroll ::-webkit-scrollbar-track {
       background-color: #6c757d;
@@ -62,24 +94,24 @@
                anemy Lms
             </div>
             <br>
-            
+
         </div>
         <i class='bx bx-menu' id="btn"></i>
     </div>
     <ul class="nav_list">
-  
+
         <li>
-         
+
                 <a href="">
                   <i class='bx bxs-home' ></i>
                     <span class="links_name">Home</span>
                 </a>
                  <span class="tooltip">Home</span>
                  <hr>
-           
+
         </li>
-        
-  
+
+
         <li>
                 <a href="{% url 'Schedule_home' %}">
                     <i class='bx bx-table' ></i>
@@ -87,135 +119,85 @@
                 </a>
                 <span class="tooltip">Schedule</span>
                 <hr>
-        
-        </li>
 
-        <li>
-            <a href="#">
-                <i class='bx bx-cog' ></i>
-                <span class="links_name">Setting</span>
-            </a>
-            <span class="tooltip">Setting</span>
-  
         </li>
-        
-    
+        {% if ExtraPermissions.open_course %}
+        <li>
+          <a href="{% url 'Schedule_student' Schedule_Name %}">
+            <i class='fas fa-book-reader'></i>
+            <span class="links_name"> Student Schedule</span>
+          </a>
+          <span class="tooltip"> Student Schedule</span>
+          <hr>
+        </li>
+      {% endif %}
+
     </ul>
     <div class="profile_content">
         <div class="profile">
             <div class="profile_details">
-                <img src="https://icon-library.com/images/white-profile-icon/white-profile-icon-24.jpgPrifile" alt="">
+                <img src="{% static 'iconins.png' %}" alt="">
                 <div class="name_job">
-                    <div class="name">Ahmed Ibrahim</div>
-                    <div class="job">Web Developer</div>
+                      <div class="name"> {{user.first_name }} {{ user.last_name}}</div>
+                       <div class="job">{{user.instructor_type}}</div>
                 </div>
             </div>
-            <i class='bx bx-log-out' id="log_out"></i>
+            <a href="{% url 'logout-view' %}"><i class='bx bx-log-out' id="log_out"></i></a>
         </div>
     </div>
   </div>
-  
-  <div class="wrapper d-flex align-items-stretch home_content">
-        <!-- Page Content  -->
-      <div id="content" class=" ">
-        
-        <header id="header">
-          <center>
-          <div class="px-3 py-2 bg-dark text-white">
-            <div class="container">
-              <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-                <a href="/" class="d-flex align-items-center my-2 my-lg-0 me-lg-auto text-white text-decoration-none">
-                </a>
-      
-                <ul class="nav col-12 col-lg-auto my-2 justify-content-center my-md-0 text-small">
-                  <li>
-                    <a href="#" class="nav-link text-secondary">
-                      Home
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#" class="nav-link text-white">
-                      Dashboard
-                    </a>
-                  </li>
-                  <li>
-                    <div class="dropdown ">
-                      <button class="btn dropdown-toggle nav-link text-white " type="button" id="triggerId" data-toggle="dropdown" aria-haspopup="true"
-                          aria-expanded="false">
-                          Schedule
-                    </button>
-                      <div class="dropdown-menu" aria-labelledby="triggerId">
 
-                        {% for instructor_Schedule in instructor_Schedule %}
-                          <div class="dropdown-divider"></div>
-                          <a class="dropdown-item" href="{% url 'Schedule_Instructor' instructor_Schedule.instructor_schedule_name %}">
-                            {{instructor_Schedule.instructor_schedule_name}}</a>
-                          <div class="dropdown-divider"></div>
-                        {% endfor %}
-                        
-                        
-                      </div>
-                    </div>
-                  </li>
-                  <li>
-                    <a href="#" class="nav-link text-white">
-                      Products
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#" onclick="p()" class="nav-link text-white">
-                      print
-                    </a>
-                  </li>
-                  
-                </ul>
-                <div class=" text-end" >
-                <ul class="nav " >
-                  <li class="nav-item"><a href="{% url 'logout-view' %}" class="nav-link link-dark px-2">Log Out</a></li>
-                  
-                </ul>
-              </div>
-              </div>
-              
-            </div>
-          </div>
-        </center>
-          <div class="px-3 py-2 border-bottom mb-3">
-            <div class="container d-flex flex-wrap justify-content-center">
-              
-      
-              <div class="text-end">
-                <center><b>welcome {{user.instructor_type}} : {{user.first_name }} {{ user.last_name}} </b></center>
-              </div>
-              
-            </div>
-          </div>
-        </header>
-        <div id="content"  class=" d-flex justify-content-center py-4 scroll" style="overflow: scroll;height: 550px;">
-          
-          <div id="requestcompanymass" class=scroll style ="display:contents; overflow: scroll ;height:700px ; ">
+  <div class="wrapper align-items-stretch home_content">
+
+    <header id="header">
+
+        <ul class="ul breadcrumb ">
+          <li class="li"><a class="a"  href="{% url 'instructor_home' %}">Home</a></li>
+          <li class="li"><a class="a" href="{% url 'Schedule_home' %}">Schedule</a></li>
+        <li class="li"><a class="a" href="{% url 'Schedule_Instructor' Schedule_Name %}">{{Schedule_Name}}</a></li>
+        <li class="li active" aria-current="page"> Student Schedule </li>
+
+
+        </ul>
+    </header>
+        <!-- Page Content  -->
+        <h1 class="text-center" style="margin-top: 100px">{{ Schedule_Name| capfirst }} students</h1>
+      <div id="" class="container ">
+
+
+        <div id=""  class=" container justify-content-center py-4 scroll" style="margin-top: 100px">
+
+          <div id="requestcompanymass" class="scroll container justify-content-center" style =" overflow-y: scroll ;height:500px ; ">
          <!--  -->
-           <table class="table table-hover table-inverse table-responsive table-dark" border="2px"  align="center" style="margin: 10px; border-radius: 20px;width: 900px;padding: 1px;">
-             <thead class="thead-inverse" style="text-align: center; border-radius: 20px;">
+           <table class="table table-hover table-inverse table-responsive table-dark " border="2px"  align="center" style="margin-left:18%; border-radius: 20px;width: 900px;padding: 1px;">
+             <thead class="thead-inverse" style="text-align: center; border-radius: 20px ;">
                <tr style=" border-radius: 20px;" >
                  <th style="width: 20.9%;">student Name</th>
                  <th style="width: 20.7%;">student userName</th>
                  <th style="width: 20%;">student ID</th>
-                 <th style="width: 12.9%;">Tasks</th>              
+                 <th style="width: 12.9%;">Tasks</th>
                  <th style="width: 12.9%;">Qizes</th>
                  <th style="width: 150px;">Report </th>
+                 {% if ExtraPermissions.delete_course %}
+                 <th style="width: 150px;">Delete</th>
+                 {% endif %}
+
                </tr>
                </thead>
                <tbody>
-                    
-                 {% for StudentSchedule  in StudentSchedule %}
+
+                 {% for studentData  in studentData %}
                  <tr style=" text-align: center;">
-                  <td scope="row">{{StudentSchedule.student_name}}</td>
+                  <td scope="row">{{studentData.first_name}}  {{studentData.last_name}} </td>
+                  <td>{{studentData.username}}</td>
+                  <td> {{studentData.id_college}}</td>
+                  <td><a href="{% url 'ViweTasks'   Schedule_Name   studentData.username %}">Task</a></td>
                   <td> <a href=""></a></td>
-                  <td> <a href=""></a></td>
-                  <td><a href="{% url 'ViweTasks'   StudentSchedule.student_schedule_name  StudentSchedule.student_name %}">Task</a></td>
-                  <td> <a href=""></a></td>                  
-                  <td> <a href="{% url 'report'  StudentSchedule.student_schedule_name StudentSchedule.student_name %}">Report</a></td>
+                  <td> <a href="{% url 'report' Schedule_Name studentData.username %}">Report</a></td>
+                  {% if ExtraPermissions.delete_course %}
+
+                  <td> <a href="{% url 'report' Schedule_Name studentData.username %}">Delete</a></td>
+                  {% endif %}
                 </tr>
                 
                 

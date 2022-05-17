@@ -6,8 +6,9 @@ from schedule.models import (
 )
 
 from .schedule_serializers import (
-    InstructorScheduleSerializer, GetMaterialSlide,
-    GetCourse, GetMaterialVideo, GetTaskInstructor
+    InstructorScheduleSerializer, StudentScheduleSerializer,
+    GetMaterialSlide, GetCourse,
+    GetMaterialVideo, GetTaskInstructor
 )
 
 from rest_framework.views import APIView
@@ -21,6 +22,14 @@ class InstructorScheduleView(APIView):
         instructor_schedule = InstructorSchedule.objects.filter(instructor_name=request.user.username)
         serial = InstructorScheduleSerializer(instance=instructor_schedule, many=True)
         return Response(serial.data)
+
+class StudentScheduleView(APIView):
+    permission_classes = [permissions.IsAuthenticated, ]
+    def get(self, request, schedule_name):
+        student_schedule = StudentSchedule.objects.filter(company_name=request.user.company_name, student_schedule_name=schedule_name)
+        serial = StudentScheduleSerializer(instance=student_schedule, many=True)
+        return Response(serial.data)
+
 
 class CourseView(APIView):
     permission_classes = [permissions.IsAuthenticated,]
@@ -66,7 +75,7 @@ class MaterialVideoView(APIView):
         MaterialVideo.objects.create(
             material_name=material_name,
             Schedule_name=schedule_name,
-            slide=lecture_video,
+            lecture_video=lecture_video,
             company_name=request.user.company_name,
         )
 

@@ -1,15 +1,18 @@
 from django.urls import reverse
 from django.shortcuts import redirect, render
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login
 from django.core.mail import send_mail
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
 from django.contrib.sites.shortcuts import get_current_site
 
-from users.models import(
-	AdminAccount, Company, SuperUserAccount, CompanyRequest,
-    InstructorAccount, StudentAccount, ParentAccount
+from quiz.models import Quiz
+from schedule.models import Post, Course, Material, MaterialVideo, TaskInstructor, TaskStudent, InstructorSchedule, \
+    StudentSchedule, Schedule
+from users.models import (
+    AdminAccount, Company, SuperUserAccount, CompanyRequest,
+    InstructorAccount, StudentAccount, ParentAccount, ExtraPermissions
 )
 
 
@@ -60,8 +63,8 @@ def super_user_home(request):
 def super_user_company_requests(request):
     context = {}
     
-    comapny_requests = CompanyRequest.objects.all()
-    context['comapny_requests'] = comapny_requests
+    company_request = CompanyRequest.objects.all()
+    context['comapny_requests'] = company_request
     
     if request.method == 'POST':
         
@@ -79,14 +82,14 @@ def super_user_company_requests(request):
         
         if status == 'approved':
             if utilities.email_exists(email=email):
-                context['email_error'] = 'This email registred before!'
+                context['email_error'] = 'This email registered before!'
                 
             elif utilities.company_name_exists(company_name=company_name):
-                context['company_name_error'] = 'This email registred before!'
+                context['company_name_error'] = 'This email registered before!'
                 
                 
             elif utilities.company_contact_email_exists(contact_email=email):
-                context['email_error'] = 'This email registred before!'
+                context['email_error'] = 'This email registered before!'
                 
             else:
                 
@@ -108,11 +111,12 @@ def super_user_company_requests(request):
                             password: {''.join(rd)}
                             
                             With link:
-                            {'http://'+get_current_site(request).domain+link}
+                            {'https://' + get_current_site(request).domain + link}
                             ''',
                             'bla@colon.com',
                             [email]
                         )
+
                     if sign == 'true':
                         sign = True
                     else:
@@ -126,6 +130,33 @@ def super_user_company_requests(request):
 						company_name = company_name,
 						admin_type 	 = 'main',
 					)
+                    extra_perm = ExtraPermissions.objects.create(
+                        user_have_perm=company_name+''.join(rd),
+                        company_name=company_name
+                    )
+
+                    extra_perm.add_doctor = True
+                    extra_perm.delete_doctor = True
+                    extra_perm.update_doctor = True
+                    extra_perm.add_assistant = True
+                    extra_perm.delete_assistant = True
+                    extra_perm.update_assistant = True
+                    extra_perm.add_trainer = True
+                    extra_perm.delete_trainer = True
+                    extra_perm.update_trainer = True
+                    extra_perm.add_admin = True
+                    extra_perm.delete_admin = True
+                    extra_perm.update_admin = True
+                    extra_perm.add_student = True
+                    extra_perm.delete_student = True
+                    extra_perm.update_student = True
+                    extra_perm.add_course = True
+                    extra_perm.delete_course = True
+                    extra_perm.add_schedule = True
+                    extra_perm.add_instructor_schedule = True
+                    extra_perm.add_student_schedule = True
+                    extra_perm.delete_instructor_schedule = True
+                    extra_perm.save()
                     
                     Company.objects.create(
 						company_name 		= user.company_name,
@@ -165,6 +196,11 @@ def super_user_company_requests(request):
        
     return render(request, 'superuser/company_requests.html', context=context)
 
+
+def delete_request(request, id):
+    CompanyRequest.objects.get(id=id).delete()
+    return redirect('super-user-company-requests')
+
 @csrf_exempt
 def get_request_data(request):
     if request.method == 'POST':
@@ -192,6 +228,64 @@ def get_all_companies(request):
 def del_company(request, id):
     del_id = Company.objects.get(id=id)
     del_id.delete()
+
+    all_admin = AdminAccount.objects.filter(company_name=del_id.company_name)
+    for admin in all_admin:
+        admin.delete()
+
+    all_instructor = InstructorAccount.objects.filter(company_name=del_id.company_name)
+    for instructor in all_instructor:
+        instructor.delete()
+
+    all_student = StudentAccount.objects.filter(company_name=del_id.company_name)
+    for student in all_student:
+        student.delete()
+
+    com_perm = ExtraPermissions.objects.filter(company_name=del_id.company_name)
+    for perm in com_perm:
+        perm.delete()
+
+    com_post = Post.objects.filter(company_name=del_id.company_name)
+    for post in com_post:
+        post.delete()
+
+    com_course = Course.objects.filter(company_name=del_id.company_name)
+    for course in com_course:
+        course.delete()
+
+    mater_slide = Material.objects.filter(company_name=del_id.companY_name)
+    for mate in mater_slide:
+        mate.delete()
+
+    mater_video = MaterialVideo.objects.filter(company_name=del_id.company_name)
+    for mate2 in mater_video:
+        mate2.delete()
+
+
+    task_ins = TaskInstructor.objects.filter(company_name=del_id.company_name)
+    for tins in task_ins:
+        tins.delete()
+
+    task_stu = TaskStudent.objects.filter(company_name=del_id.company_name)
+    for tstu in task_stu:
+        tstu.delete()
+
+    com_quiz = Quiz.objects.filter(company_name=del_id.company_name)
+    for cquiz in com_quiz:
+        cquiz.delete()
+
+    com_ins_schedule = InstructorSchedule.objects.filter(company_name=del_id.company_name)
+    for cinsch in com_ins_schedule:
+        cinsch.delete()
+
+    com_stu_schedule = StudentSchedule.objects.filter(company_name=del_id.company_name)
+    for cstsch in com_stu_schedule:
+        cstsch.delete()
+
+    com_schedule = Schedule.objects.filter(company_name=del_id.company_name)
+    for csch in com_schedule:
+        csch.delete()
+
     return redirect('all-companies')
 
 def get_all_admins(request):
@@ -206,11 +300,6 @@ def get_all_admins(request):
         return render(request, 'superuser/admins.html', context={'all_admins': all_admins, 'all_companies': all_companies})
 
 
-def del_admin(request, id):
-    del_id = AdminAccount.objects.get(id=id)
-    del_id.delete()
-    return redirect('super-all-admins')
-
 
 def get_all_instructor(request):
     all_companies = Company.objects.all()
@@ -222,10 +311,6 @@ def get_all_instructor(request):
         co_name = request.POST.get('co_name')
         instructors = InstructorAccount.objects.filter(company_name=co_name)
         return render(request, 'superuser/instructors.html', context={'instructors': instructors, 'all_companies': all_companies})
-
-def del_instructor(request, id):
-    InstructorAccount.objects.get(id=id).delete()
-    return redirect('super-all-instructors')
 
 
 def get_all_student(request):
@@ -240,18 +325,10 @@ def get_all_student(request):
         return render(request, 'superuser/student.html', context={'student': student, 'all_companies': all_companies})
 
 
-def del_student(request, id):
-    StudentAccount.objects.get(id=id).delete()
-    return redirect('super-all-instructors')
-
 def get_all_parent(request):
     parent = ParentAccount.objects.all()
     return render(request, 'superuser/parent.html', context={'parent': parent})
 
-
-def del_parent(request, id):
-    ParentAccount.objects.get(id=id).delete()
-    return redirect('super-all-instructors')
 
 
 

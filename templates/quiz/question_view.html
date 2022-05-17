@@ -1,45 +1,30 @@
+{% extends 'base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html>
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<link rel="stylesheet" href="{% static 'style.css' %}">
-	    <link rel="stylesheet" href="{% static 'css/form_style.css' %}">
-	    <link rel="stylesheet" href="{% static 'css/sidebar.css' %}">
 
-	    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+{% block title %}
+{{ quiz_name }} | Question
+{% endblock %}
 
 
-	    <link href='https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css' rel='stylesheet'>
-
-	    <script src="{% static 'js/jquery-min.js' %}"></script>
-
-	    <script src="{% static 'js/popper.js' %}"></script>
-	    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
-	    <script src="{% static 'js/bootstrap.bundle.min.v5.js' %}"></script>
-		<title>Questions</title>
-
-	</head>
 
 
-	<body>
-		<nav class="navbar navbar-light bg-light fixed-top">
+{% block content %}
+    <nav class="navbar navbar-light bg-light fixed-top">
 		  <div class="container">
 		    <h3>Quiz: <span class="text-danger">{{quiz_name}}</span></h3>
 
 		    <div class="dflex">
 		      <b class="c_left">
-				
+
 		      </b>
 		      <div class="time-interval">
-		  
+
 		      </div>
 		    </div>
 		  </div>
 		</nav>
 
-	    <div class="container" style="margin: 170px 0 0 0;">
+    <div class="container" style="margin-top: 100px;">
 
 			{% for q in question %}
 				<input name="q_name" type="text" value="{{ q.id }}" hidden is_theory="{{q.is_theory_question}}">
@@ -61,21 +46,21 @@
 									<label class="form-check-label" for="">{{q.chose1}}</label>
 								</div>
 							{% endif %}
-						
+
 							{% if q.chose2 %}
 								<div class="form-check">
 									<input class="form-check-input" type="radio" name="{{q.id}}" value="{{q.chose2}}">
 									<label class="form-check-label" for="">{{q.chose2}}</label>
 								</div>
 							{% endif %}
-						
+
 							{% if q.chose3 %}
 								<div class="form-check">
 									<input class="form-check-input" type="radio" name="{{q.id}}" value="{{q.chose3}}">
 									<label class="form-check-label" for="">{{q.chose3}}</label>
 								</div>
 							{% endif %}
-						
+
 							{% if q.chose4 %}
 								<div class="form-check">
 									<input class="form-check-input" type="radio" name="{{q.id}}" value="{{q.chose4}}">
@@ -90,14 +75,9 @@
 
 			{% endfor %}
 			<button id="btn_save" class="btn btn-primary" style="margin-top: 80px; margin-bottom: 80px;">Send</button>
-	      
-		</div>
 
-
-
-
-
-	    <script>
+    </div>
+    	    <script>
 
 
 			const loc = window.location.origin
@@ -158,7 +138,7 @@
 
 
 	      let loc_host = `ws://${window.location.host}`
-	    
+
 	      let socket = new WebSocket(`${loc_host}/ws/test_cons/`)
 
 
@@ -185,23 +165,27 @@
 
 	                      	}else if(data['quiz_start'][k]['is_start'] == 'ended'){
 							  document.getElementById('btn_save').click()
-	                          
+
 	                      	}
 
 	                  	}
-	                      
+
 	              	}
-	              
+
 	          	})
 	          socket.send(true)
 
-	          
+
 	      }
 
-	    
+
 	    </script>
 
-	</body>
+{% endblock %}
 
 
-</html>
+
+
+
+
+

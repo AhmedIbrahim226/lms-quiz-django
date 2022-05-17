@@ -1,8 +1,9 @@
 import json, random
 
+from users.models import InstructorAccount, StudentAccount
 from .tasks import check_theory
 
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render, reverse
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 from .models import Quiz, Question, ReportResult
@@ -10,9 +11,13 @@ from .models import Quiz, Question, ReportResult
 
 def quiz_view(request, schedule_name):
     if not request.user.is_authenticated:
-        return redirect('login-view')
+        return redirect('home')
 
-
+    if (
+        not StudentAccount.objects.filter(username=request.user.username).exists() and
+        not InstructorAccount.objects.filter(username=request.user.username).exists()
+    ):
+        return redirect('logout-view')
 
     context = {}
     context['Schedule_name'] = schedule_name
@@ -32,12 +37,8 @@ def quiz_view(request, schedule_name):
     context['all_quizes'] = all_quizes
     context['quiz_list'] = [int(q.id) for q in all_quizes]
 
-    try:
-        if request.user.instructor_type:
-            return render(request, 'quiz/quiz_view.html', context=context)
-    except:
-        if request.user.id_college:
-            return render(request, 'quiz/quiz_view_st.html', context=context)
+    if StudentAccount.objects.filter(username=request.user.username).exists():
+        return render(request, 'quiz/quiz_view_st.html', context=context)
 
     
     
@@ -60,7 +61,7 @@ def question_view(request, *args, **kwargs):
     quiz_name = Quiz.objects.get(id=quiz_id)
 
     if ReportResult.objects.filter(user=request.user, quiz=quiz_name).exists():
-        return redirect('quiz-view')
+        return redirect(reverse('quiz-view', kwargs={'schedule_name': kwargs['schedule_name']}))
 
     context['quiz_name'] = quiz_name.name
     context['quiz_id'] = quiz_id
@@ -112,7 +113,7 @@ def get_quiz_degree(request):
 
 
 # student reports #
-def reports_views(request):
+def reports_views(request, schedule_name):
 
 
     report_quiz = ReportResult.objects.filter(user=request.user)
@@ -120,17 +121,17 @@ def reports_views(request):
     for x in report_quiz:
         list_quiz.append(x.quiz.id)
 
-    my_quizes = Quiz.objects.filter(id__in=list_quiz)
+    my_quizes = Quiz.objects.filter(id__in=list_quiz, schedule_name=schedule_name)
 
-    return render(request, 'quiz/student_quiz_reports.html', context={'my_quizes': my_quizes})
+    return render(request, 'quiz/student_quiz_reports.html', context={'my_quizes': my_quizes, 'Schedule_name': schedule_name})
 
 
 from .models import TotalDegree
-def student_report(request, id):
+def student_report(request, id, schedule_name):
 
     my_quiz = Quiz.objects.get(id=id)
 
     reports = ReportResult.objects.filter(quiz=my_quiz, user=request.user)
     total = TotalDegree.objects.filter(quiz=my_quiz, user=request.user)
 
-    return render(request, 'quiz/student_report.html', context={'reports': reports, 'total': total})
+    return render(request, 'quiz/student_report.html', context={'reports': reports, 'total': total, 'Schedule_name': schedule_name, 'q_name': my_quiz.name})

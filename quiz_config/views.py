@@ -2,23 +2,27 @@ import datetime
 import json
 import random
 import string
-from multiprocessing import context
 from django.shortcuts import render, redirect
-from django.http import HttpResponse, JsonResponse
-from django.contrib.auth import authenticate, login, logout
+from django.http import JsonResponse
 from django.urls import reverse
-from django.views.decorators.csrf import csrf_exempt, csrf_protect
 
 from quiz.models import Quiz, Question, ReportResult, TotalDegree
+from schedule.models import InstructorSchedule
+from users.models import InstructorAccount
 from .forms import QuizForm, QuestionForm
 from .check_num_of_q import check_theory_q, check_chose_q
 
 
 def create_quiz(request, schedule_name):
     if not request.user.is_authenticated:
-        return redirect('login-view')
+        return redirect('home')
+    elif not InstructorAccount.objects.filter(username=request.user.username).exists():
+        return redirect('home')
     
     context = {}
+    ins_schedule = InstructorSchedule.objects.filter(instructor_name=request.user.username)
+    context['instructor_Schedule'] = ins_schedule
+
     quiz_form = QuizForm()
     
     context['quiz_form'] = quiz_form
@@ -51,10 +55,15 @@ def generate_code(request):
 
 def edit_quiz(request, id):
     if not request.user.is_authenticated:
-        return redirect('login-view')
+        return redirect('home')
+    elif not InstructorAccount.objects.filter(username=request.user.username).exists():
+        return redirect('home')
+
     
     context = {}
-    
+    ins_schedule = InstructorSchedule.objects.filter(instructor_name=request.user.username)
+    context['instructor_Schedule'] = ins_schedule
+
     quiz = Quiz.objects.get(id=id)
     quiz_form = QuizForm(instance=quiz)
     
@@ -87,11 +96,16 @@ def delete_unanswered_quiz(request, id, schedule_name):
 
 def my_quizes(request, schedule_name):
     if not request.user.is_authenticated:
-        return redirect('login-view')
+        return redirect('home')
+    elif not InstructorAccount.objects.filter(username=request.user.username).exists():
+        return redirect('home')
     
     context = {}
+    ins_schedule = InstructorSchedule.objects.filter(instructor_name=request.user.username)
+
     context['Schedule_name'] = schedule_name
-    
+    context['instructor_Schedule'] = ins_schedule
+
     form = QuestionForm()
     context['form'] = form
     
@@ -167,15 +181,22 @@ def response_id(request):
 
 def quiz_questions(request, id, schedule_name):
     if not request.user.is_authenticated:
-        return redirect('login-view')
+        return redirect('home')
+    elif not InstructorAccount.objects.filter(username=request.user.username).exists():
+        return redirect('home')
+
+    ins_schedule = InstructorSchedule.objects.filter(instructor_name=request.user.username)
     
     questions = Question.objects.filter(quiz=id)
-    return render(request, 'quiz/quiz_questions.html', context={'questions': questions,'Schedule_name': schedule_name, 'quiz_id': id})
+    return render(request, 'quiz/quiz_questions.html', context={'questions': questions,'Schedule_name': schedule_name, 'quiz_id': id, 'instructor_Schedule': ins_schedule})
 
 
 def edit_question(request, *args, **kwargs):
     if not request.user.is_authenticated:
-        return redirect('login-view')
+        return redirect('home')
+    elif not InstructorAccount.objects.filter(username=request.user.username).exists():
+        return redirect('home')
+
     schedule_name = kwargs['schedule_name']
     quiz_id     = kwargs['quiz_id']
     question_id = kwargs['question_id']
@@ -221,7 +242,11 @@ def delete_question(request, *args, **kwargs):
 
 def quizes_report_view(request, schedule_name):
     if not request.user.is_authenticated:
-        return redirect('login-view')
+        return redirect('home')
+    elif not InstructorAccount.objects.filter(username=request.user.username).exists():
+        return redirect('home')
+
+    ins_schedule = InstructorSchedule.objects.filter(instructor_name=request.user.username)
     
     user = request.user
     my_quizes = Quiz.objects.filter(company_name=user.company_name, schedule_name=schedule_name, is_answered=True)
@@ -230,18 +255,25 @@ def quizes_report_view(request, schedule_name):
         quiz = request.POST.get('quiz_id')
         Quiz.objects.get(id=quiz).delete()
 
-    return render(request, 'quiz/my_quizes_report.html', context={'my_quizes': my_quizes})
+    return render(request, 'quiz/my_quizes_report.html', context={'my_quizes': my_quizes, 'Schedule_name': schedule_name, 'instructor_Schedule': ins_schedule})
 
 
 from django.template.response import TemplateResponse
-def report_view(request, id):
+def report_view(request, id, schedule_name):
     context = {}
     context2 = {}
 
     my_quiz = Quiz.objects.get(id=id)
 
+    ins_schedule = InstructorSchedule.objects.filter(instructor_name=request.user.username)
+
     context['q_name'] = my_quiz.name
+    context['Schedule_name'] = schedule_name
+    context['instructor_Schedule'] = ins_schedule
+
     context2['q_name'] = my_quiz.name
+    context2['Schedule_name'] = schedule_name
+    context2['instructor_Schedule'] = ins_schedule
 
     reports = ReportResult.objects.filter(quiz=my_quiz)
     total   = TotalDegree.objects.filter(quiz=my_quiz)
@@ -282,14 +314,8 @@ def report_view(request, id):
         elif total_id_college:
             return TemplateResponse(request, 'quiz/one_quiz_report.html', context=context2)
         else:
-            return TemplateResponse(request, 'quiz/one_quiz_report.html', context={})
+            return TemplateResponse(request, 'quiz/one_quiz_report.html', context={'Schedule_name': schedule_name, 'instructor_Schedule': ins_schedule})
 
     else:
         return TemplateResponse(request, 'quiz/one_quiz_report.html', context=context )
 
-
-
-
-def lgout_view(request):
-    logout(request)
-    return redirect('login-view')

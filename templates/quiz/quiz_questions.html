@@ -22,7 +22,7 @@
 		<title>Edit quetions</title>
 
 
-    	<style>
+        <style>
             hr{
               background-color: white;
             }
@@ -59,78 +59,74 @@
 
 
 	<body>
+
         <div class="sidebar">
-            <div class="logo_content">
-                <div class="logo">
-                  <i class='bx bxl-kickstarter'></i>
-                    <div class="logo_name">
-                       anemy Lms
-                    </div>
-                    <br>
-                    
-                </div>
-                <i class='bx bx-menu' id="btn"></i>
-            </div>
-            <ul class="nav_list">
-          
-                <li>
-                 
-                        <a href="{% url 'instructor_home' %}">
-                          <i class='bx bxs-home' ></i>
-                            <span class="links_name">Home</span>
-                        </a>
-                         <span class="tooltip">Home</span>
-                         <hr>
-                   
-                </li>
-                
-          
-                <li>
-                        <a href="{% url 'Schedule_home' %}">
-                            <i class='bx bx-table' ></i>
-                            <span class="links_name">Schedule</span>
-                        </a>
-                        <span class="tooltip">Schedule</span>
-                        <hr>
-                
-                </li>
-              
-                <li>
-                    <a href="#">
-                        <i class='bx bx-cog' ></i>
-                        <span class="links_name">Setting</span>
-                    </a>
-                    <span class="tooltip">Setting</span>
-          
-                </li>
-                
-            
-            </ul>
-            <div class="profile_content">
-                <div class="profile">
-                    <div class="profile_details">
-                        <img src="https://icon-library.com/images/white-profile-icon/white-profile-icon-24.jpgPrifile" alt="">
-                        <div class="name_job">
-                            <div class="name">Ahmed Ibrahim</div>
-                            <div class="job">Web Developer</div>
-                        </div>
-                    </div>
-                    <i class='bx bx-log-out' id="log_out"></i>
-                </div>
-            </div>
-        </div>
+  <div class="logo_content">
+      <div class="logo">
+        <i class='bx bxl-kickstarter'></i>
+          <div class="logo_name">
+             anemy Lms
+          </div>
+          <br>
+
+      </div>
+      <i class='bx bx-menu' id="btn"></i>
+  </div>
+  <ul class="nav_list">
+
+      <li>
+
+              <a href="{% url 'instructor_home' %}">
+                <i class='bx bxs-home' ></i>
+                  <span class="links_name">Home</span>
+              </a>
+               <span class="tooltip">Home</span>
+               <hr>
+
+      </li>
+
+
+      <li>
+              <a href="{% url 'Schedule_home' %}">
+                  <i class='bx bx-table' ></i>
+                  <span class="links_name">Schedule</span>
+              </a>
+              <span class="tooltip">Schedule</span>
+              <hr>
+
+      </li>
+
+
+
+  </ul>
+  <div class="profile_content">
+      <div class="profile">
+          <div class="profile_details">
+            <img src="{% static 'iconins.png' %}" alt="">
+              <div class="name_job">
+                  <div class="name"> {{user.first_name }} {{ user.last_name}} </div>
+                  <div class="job">{{user.instructor_type}}</div>
+              </div>
+          </div>
+          <a href="{% url 'logout-view' %}" class="text-white"><i class='bx bx-log-out' id="log_out"></i></a>
+      </div>
+  </div>
+</div>
 
         <div class="home_content">
 
-            <header>
-                <center>
+           <header>
+
                   <div class="px-3 py-2 text-white" style="background-color: #11101d;">
                     <div class="container">
-                      <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+                      <div class="justify-content-center justify-content-lg-start">
                         <a href="#" class="d-flex align-items-center my-2 my-lg-0 me-lg-auto text-white text-decoration-none">
                         </a>
 
                         <ul class="nav col-12 col-lg-auto my-2 justify-content-center my-md-0 text-small">
+                            <li>
+                                <a href="{% url 'instructor_home' %}" class="nav-link text-white">home</a>
+                            </li>
                             <li>
                                 <a href="{% url 'add-quiz' Schedule_name %}" class="nav-link text-white">Add quiz</a>
                             </li>
@@ -142,15 +138,12 @@
                                 <a href="{% url 'quiz-view' Schedule_name %}" class="nav-link text-white">Check view Quizes</a>
                             </li>
                             <li>
-                                <a href="{% url 'reports-view' %}" class="nav-link text-white">Quiz report</a>
+                                <a href="{% url 'reports-view' Schedule_name %}" class="nav-link text-white">Quiz report</a>
                             </li>
 
-                            <li>
-                                <a href="{% url 'instructor_home' %}" class="nav-link text-white">home</a>
-                            </li>
 
                           <li>
-                           
+
                             <div class="dropdown ">
                               <button class="btn dropdown-toggle nav-link text-white " type="button" id="triggerId" data-toggle="dropdown" aria-haspopup="true"
                                   aria-expanded="false">
@@ -164,31 +157,22 @@
                                     {{instructor_Schedule.instructor_schedule_name}}</a>
                                   <div class="dropdown-divider"></div>
                                 {% endfor %}
-                                
-                                
+
+
                               </div>
                             </div>
                           </li>
-                          <li>
-                            <a href="{% url 'Settings' %}" class="nav-link text-white">
-                              Settings                   
-                            </a>
-                          </li>
-                        
+
+
 
 
                         </ul>
-                        <div class=" text-end">
-                          <ul class="nav ">
-                            <li class="nav-item"><a href="{% url 'logout-view' %}" class="nav-link link-dark px-2">Log Out</a></li>
 
-                          </ul>
-                        </div>
-                      </div>
 
                     </div>
                   </div>
-                </center>
+                  </div>
+
                 <!-- <div class="px-3 py-2 border-bottom mb-3">
                   <div class="container d-flex flex-wrap justify-content-center">
 
@@ -201,6 +185,7 @@
                 </div> -->
 
             </header>
+
         	<div class="row justify-content-center" style="margin-top: 100px;">
 				{% for data in questions %}
 
@@ -228,8 +213,8 @@
 							<p class="text-muted">{{ data.correct_chosen }}</p>
 
 
-							<a href="{% url 'edit-question' quiz_id data.id %}" class="btn btn-warning btn-sm">Edit</a>
-							<a href="{% url 'delete-question' quiz_id data.id %}" class="btn btn-danger btn-sm">Delete</a>
+							<a href="{% url 'edit-question' quiz_id data.id Schedule_name %}" class="btn btn-warning btn-sm">Edit</a>
+							<a href="{% url 'delete-question' quiz_id data.id Schedule_name %}" class="btn btn-danger btn-sm">Delete</a>
 						
 						{% else %}
 

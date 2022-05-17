@@ -350,27 +350,45 @@ class Company(models.Model):
 
 
 class ExtraPermissions(models.Model):
-    user_have_perm   = models.CharField(max_length=20, unique=True)
-    company_name     = models.CharField(max_length=50)
-    add_doctor       = models.BooleanField(default=False)
-    delete_doctor    = models.BooleanField(default=False)
-    update_doctor    = models.BooleanField(default=False)
-    add_assistant    = models.BooleanField(default=False)
+    user_have_perm = models.CharField(max_length=50, unique=True)
+    company_name = models.CharField(max_length=50)
+
+    add_doctor = models.BooleanField(default=False)
+    delete_doctor = models.BooleanField(default=False)
+    update_doctor = models.BooleanField(default=False)
+    # -----------
+    add_assistant = models.BooleanField(default=False)
     delete_assistant = models.BooleanField(default=False)
     update_assistant = models.BooleanField(default=False)
-    add_trainer      = models.BooleanField(default=False)
-    delete_trainer   = models.BooleanField(default=False)
-    update_trainer   = models.BooleanField(default=False)
-    add_admin        = models.BooleanField(default=False)
-    delete_admin     = models.BooleanField(default=False)
-    update_admin     = models.BooleanField(default=False)
-    add_student      = models.BooleanField(default=False)
-    delete_student   = models.BooleanField(default=False)
-    update_student   = models.BooleanField(default=False)
-    open_course      = models.BooleanField(default=False)
-    delete_course    = models.BooleanField(default=False)
+    # ----------
+    add_trainer = models.BooleanField(default=False)
+    delete_trainer = models.BooleanField(default=False)
+    update_trainer = models.BooleanField(default=False)
+    # ------------
+    add_admin = models.BooleanField(default=False)
+    delete_admin = models.BooleanField(default=False)
+    update_admin = models.BooleanField(default=False)
+    # ------------
+    add_student = models.BooleanField(default=False)
+    delete_student = models.BooleanField(default=False)
+    update_student = models.BooleanField(default=False)
+    # ------
+
+    # admin
+    add_course = models.BooleanField(default=False)
+    add_schedule = models.BooleanField(default=False)
+    add_instructor_schedule = models.BooleanField(default=False)
+    add_student_schedule = models.BooleanField(default=False)  # admin ins
+    delete_instructor_schedule = models.BooleanField(default=False)
+
+    delete_course = models.BooleanField(default=False)  # ins admin delete student from sch
+    # --------------- inst-------------- #
+    open_course = models.BooleanField(default=False)  # ins
     upload_materials = models.BooleanField(default=False)
-    add_quiz         = models.BooleanField(default=False)
-    
+    add_quiz = models.BooleanField(default=False)
+    add_task = models.BooleanField(default=False)
+    #
+    add_post = models.BooleanField(default=False)
+
     def __str__(self) -> str:
         return f'{self.user_have_perm} : {self.company_name}'

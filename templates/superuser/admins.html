@@ -41,7 +41,6 @@
 					<th>Date joined</th>
 					<th>Last login</th>
 					<th>Company</th>
-					<th></th>
 				</tr>
 			</thead>
 			<tbody>
@@ -56,7 +55,6 @@
 						<td>{{data.date_joined}}</td>
 						<td>{{data.last_login}}</td>
 						<td>{{data.company_name}}</td>
-						<td><a class="btn btn-light" href="{% url 'super-del-admin' data.id %}">Delete</a></td>
 
 					</tr>
 				{% endfor %}

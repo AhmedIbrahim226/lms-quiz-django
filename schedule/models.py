@@ -5,6 +5,7 @@ from django.db import models
 class Post(models.Model):
     user_have_post = models.CharField(max_length=50)
     post_title = models.CharField(max_length=30)
+    Schedule_name    = models.CharField(max_length=50)
     post_file = models.FileField(upload_to='posts/%Y/%m/%d/')
     post_description = models.TextField()
     company_name = models.CharField(max_length=50)
@@ -66,14 +67,6 @@ class TaskStudent (models.Model):
 
     def __str__(self):
         return self. std_schedule
-
-class Quiz(models.Model):
-    quiz_name = models.CharField(max_length=50)
-    company_name = models.CharField(max_length=50)
-    created_on = models.DateTimeField(default=timezone.now)
-
-    def __str__(self):
-        return self.quiz_name
 
 
 class InstructorSchedule(models.Model):

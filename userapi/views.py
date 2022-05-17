@@ -229,11 +229,10 @@ class LoginApi(APIView):
                     return Response({'error_active': 'user is not active'}, status=status.HTTP_400_BAD_REQUEST)
 
                 if user is not None:
-                    if user.company_name == company_name:
+
                         serial = LoginParentUserSerializer(user)
                         return Response(serial.data)
-                    else:
-                        return Response({'error_login': 'You can\'t login in this company'}, status=status.HTTP_400_BAD_REQUEST)
+
                 else:
                     return Response({'error_login': 'email or password not correct!'}, status=status.HTTP_400_BAD_REQUEST)
             elif models.ParentAccount.objects.filter(username=username).exists():
@@ -254,49 +253,10 @@ class LoginApi(APIView):
                     return Response({'error_login': 'username or password not correct!'}, status=status.HTTP_400_BAD_REQUEST)
 
             else:
-                # return Response({'error_login': 'You can\'t login in this company'}, status=status.HTTP_400_BAD_REQUEST)
                 return Response({'error_login': 'You can\'t login you arn\'t parent'}, status=status.HTTP_400_BAD_REQUEST)
 
         else:
             return Response({'error_user_type': 'No chosen correct type'}, status=status.HTTP_400_BAD_REQUEST)
-
-        '''user = authenticate(username=username, password=password)
-        print(user)
-        
-        if user is not None:
-            if user.company_name == company_name:
-        
-                if user_type == 'doctor' and models.InstructorAccount.objects.filter(username=user.username, instructor_type=user_type).exists():
-                    
-                        serial = LoginInstructorUserSerializer(user)
-                        return Response(serial.data)
-                    
-                elif user_type == 'assistant' and models.InstructorAccount.objects.filter(username=user.username, instructor_type=user_type).exists():
-                    
-                        serial = LoginInstructorUserSerializer(user)
-                        return Response(serial.data)
-                    
-                elif user_type == 'trainer' and models.InstructorAccount.objects.filter(username=user.username, instructor_type=user_type).exists():
-                    
-                        serial = LoginInstructorUserSerializer(user)
-                        return Response(serial.data)
-                    
-                elif user_type == 'student' and models.StudentAccount.objects.filter(username=user.username).exists():
-                    
-                        serial = LoginStudentUserSerializer(user)
-                        return Response(serial.data)
-                    
-                elif user_type == 'parent' and models.ParentAccount.objects.filter(username=user.username).exists():
-                    
-                        serial = LoginParentUserSerializer(user)
-                        return Response(serial.data)
-                    
-                else:
-                    return Response({'error_type': 'not chosen type'}, status=status.HTTP_404_NOT_FOUND)
-            else:
-                return Response({'not_in_company': 'not in this company'}, status=status.HTTP_404_NOT_FOUND)
-        else:
-            return Response({'message': 'Invalid credential, try again'}, status=status.HTTP_400_BAD_REQUEST)'''
             
         
 class SignUpApi(APIView):

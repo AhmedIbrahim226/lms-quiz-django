@@ -53,10 +53,14 @@
     .scroll ::-webkit-scrollbar-thumb:hover {
       background-color: #6c757d;
     }
+         .modal-dialog {
+          max-width: 700px;
+          margin: 1.75rem auto;
+      }
   </style>
 </head>
 
-<body scroll>
+<body class=scroll>
 
   <div class="sidebar">
     <div class="logo_content">
@@ -83,6 +87,9 @@
 
       </li>
 
+{% if  user.admin_type == "Main"  or  user.admin_type == "main"  %}
+
+
       <li>
         <a href="{% url 'course_admin' %}">
           <i class="fas fa-book-open"></i>
@@ -95,7 +102,7 @@
       <li>
         <a href="{% url 'Schedule_admin' %}">
           <i class='bx bx-table'></i>
-          <span class="links_name">Schedule</span>
+          <span class="links_name">Schedule </span>
         </a>
         <span class="tooltip">Schedule</span>
         <hr>
@@ -123,6 +130,60 @@
       </li>
 
 
+{% elif user.admin_type == "inherit"  or  user.admin_type == "Inherit" %}
+
+
+  {% if ExtraPermissions.add_course %}
+  <!-- course_admin -->
+        <li>
+          <a href="{% url 'course_admin' %}">
+            <i class="fas fa-book-open"></i>
+            <span class="links_name">Course</span>
+          </a>
+          <span class="tooltip">Course</span>
+          <hr>
+        </li>
+        {% endif %}
+    {% if ExtraPermissions.add_schedule %}
+    <!-- Schedule_admin -->
+
+    <li>
+      <a href="{% url 'Schedule_admin' %}">
+        <i class='bx bx-table'></i>
+        <span class="links_name">Schedule </span>
+      </a>
+      <span class="tooltip">Schedule</span>
+      <hr>
+
+    </li>
+    {% endif %}
+    {% if ExtraPermissions.add_instructor_schedule == True %}
+    <!-- Schedule_instructor_admin -->
+        <li>
+          <a href="{% url 'Schedule_instructor_admin' %}">
+
+            <i class="fa-solid fa-rectangle-history-circle-user"></i>
+            <span class="links_name">Schedule Instructor</span>
+          </a>
+          <span class="tooltip">Schedule Instructor</span>
+          <hr>
+        </li>
+        {% endif %}
+    {% if ExtraPermissions.add_student_schedule %}
+  <!-- Schedule_student_admin -->
+  <li>
+    <a href="{% url 'Schedule_student_admin' %}">
+      <i class='fas fa-book-reader'></i>
+      <span class="links_name">Schedule Student</span>
+    </a>
+    <span class="tooltip">Schedule Student</span>
+    <hr>
+  </li>
+  {% endif %}
+
+{% endif %}
+
+
 
 
       <!-- fas fa-chalkboard-teacher -->
@@ -131,14 +192,13 @@
     <div class="profile_content">
       <div class="profile">
         <div class="profile_details">
-          <img src="https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png" alt=" image ">
+          <img src="{% static 'photo/user_type/admin.png' %}" alt=" image ">
           <div class="name_job">
-            <div class="name"><a title="Profile" href="{% url 'profile_admin' %}">{{user.first_name }} 
-              {{user.last_name}}</a> </div>
-            <div class="job">{{user.instructor_type}}</div>
+            <div class="name"><a title="Profile" class="text-white" href="{% url 'my-info' %}">{{user.first_name }} {{ user.last_name}}</a> </div>
+            <div class="job">{{user.admin_type}}</div>
           </div>
         </div>
-        <a href="{% url 'logout-view' %}"><i class='bx bx-log-out' id="log_out"></i></a>
+        <a href="{% url 'logout-view' %}"><i class='bx bx-log-out text-white' id="log_out"></i></a>
       </div>
     </div>
   </div>
@@ -256,12 +316,6 @@
 
 
               </ul>
-              <div class=" text-end">
-                <ul class="nav ">
-                  <li class="nav-item"><a href="{% url 'logout-view' %}" class="nav-link link-dark px-2">Log Out</a></li>
-
-                </ul>
-              </div>
             </div>
 
           </div>
@@ -276,7 +330,9 @@
       <div id="content" class="py-4 ">
 
         <div class="container">
-          <div class="row">
+                      <h1 class="text-center" style="margin-top: 50px">Manage Instructors</h1>
+
+          <div class="row" style="margin-top: 100px">
             <div class=" scroll" style="">
               <div class=" scroll col-md col-sm col-lg-12 col-11 "style="overflow: scroll-x; ">
                 <table class="table scroll table table-striped  table-bordered table-hover table-inverse table-responsive" id="tableins">
@@ -377,10 +433,10 @@
   <!-- Modal -->
   <div class="modal fade scroll" id="modelId" tabindex="-1" role="dialog" aria-labelledby="modelTitleId"
     aria-hidden="true">
-    <div class="scroll modal-dialog modal-fullscreen-lg-down col-8" role="document">
+    <div class="scroll modal-dialog modal-fullscreen-lg-down " style="width: 1000px;" role="document">
       <div class="modal-content scroll">
         <div class="modal-header">
-          <h6 class="modal-title">Modal title</h6>
+          <h6 class="modal-title">Add Instructor</h6>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -390,35 +446,35 @@
             <div class="container-fluid row row g-3">
               <div class="col-md-6">
                 <label for="inputEmail4" class="form-label">First Name</label>
-                <input type="text" name="firstname" class="form-control" id="inputEmail4">
+                <input required type="text" name="firstname" class="form-control" id="inputEmail4">
               </div>
               <div class="col-md-6">
                 <label for="inputPassword4" class="form-label">Last Name</label>
-                <input type="text" name="lastname" class="form-control" id="inputPassword4">
+                <input required type="text" name="lastname" class="form-control" id="inputPassword4">
               </div>
 
               <div class="col-12">
                 <label for="inputAddress" class="form-label">E-mail</label>
-                <input type="text" name="email" class="form-control" id="inputAddress" placeholder="">
+                <input required type="text" name="email" class="form-control" id="inputAddress" placeholder="">
               </div>
 
               <div class="col-md-6">
                 <label for="inputEmail4" class="form-label">User Name</label>
-                <input type="text" name="username" class="form-control" id="inputEmail4">
+                <input required type="text"  name="username" class="form-control" id="inputEmail4">
               </div>
               <div class="col-md-6">
                 <label for="inputPassword4" class="form-label">Password</label>
-                <input type="password" name="password" class="form-control" id="inputPassword4">
+                <input required type="password" name="password" class="form-control" id="inputPassword4">
               </div>
 
               <div class="col-md-6">
                 <label for="inputEmail4" class="form-label">Department</label>
-                <input type="text" name="department" class="form-control" id="inputEmail4">
+                <input required type="text" name="department" class="form-control" id="inputEmail4">
               </div>
               <div class="col-md-6">
 
                 <label for="">Type</label>
-                <select class="form-select" name="type" id="">
+                <select  class="form-select" name="type" id="">
                   {% if ExtraPermissions.add_doctor %}
                   <option value="doctor">Doctor</option>
                   {% endif %}
@@ -437,24 +493,26 @@
               <hr class=" btn-Dark_blue">
 
               <div class="row">
-                <div class="col">
+                <div class="col-6">
                   <div class="form-check">
                     <input class="form-check-input" name="opencourse" type="checkbox" id="gridCheck">
                     <label class="form-check-label" for="gridCheck">
-                      Open Course
+                      Add Student Schedule
                     </label>
                   </div>
                 </div>
 
-                <div class="col">
+                <div class="col-6">
                   <div class="form-check">
                     <input class="form-check-input" name="deletecourse" type="checkbox" id="gridCheck">
                     <label class="form-check-label" for="gridCheck">
-                      Delete Course
+                      Delete Student Schedule
                     </label>
                   </div>
                 </div>
-
+              </div>
+                <hr>
+                <div class="row">
                 <div class="col">
                   <div class="form-check">
                     <input class="form-check-input" name="material" type="checkbox" id="gridCheck">
@@ -464,8 +522,8 @@
                   </div>
                 </div>
 
-              </div>
-              <div class="row">
+
+
                 <div class="col">
                   <div class="form-check">
                     <input class="form-check-input" name="task" type="checkbox" id="gridCheck">
@@ -474,7 +532,10 @@
                     </label>
                   </div>
                 </div>
+                </div>
+                <hr>
                 {% csrf_token %}
+                <div class="row">
                 <div class="col">
                   <div class="form-check">
                     <input class="form-check-input" name="post" type="checkbox" id="gridCheck">
@@ -494,6 +555,7 @@
                 </div>
 
               </div>
+
             </div>
           </div>
           <div class="modal-footer">
@@ -524,27 +586,29 @@
             <div class="container-fluid row row g-3">
               <div class="col-md-6">
                 <label for="inputEmail4" class="form-label">First Name</label>
-                <input type="text" name="efirstname" class="form-control" id="efirstname">
+                <input type="text" name="efirstname" class="form-control" id="efirstname" required>
               </div>
               <div class="col-md-6">
                 <label for="inputPassword4" class="form-label">Last Name</label>
-                <input type="text" name="elastname" class="form-control" id="elastname">
+                <input type="text" name="elastname" class="form-control" id="elastname" required>
               </div>
 
               <div class="col-12">
                 <label for="inputAddress" class="form-label">E-mail</label>
-                <input type="Email" name="eemail"  class="form-control"  id="eemail" placeholder="">
+                <input type="email" name="eemail"  class="form-control"  id="eemail" placeholder="" required>
+                <input type="email" hidden  name="cemail"  class="form-control"  id="cemail" placeholder="" required>
               </div>
 
               <div class="col-12">
                 <label for="inputEmail4" class="form-label">User Name</label>
-                <input type="text" name="eusername" id="eusername"  class="form-control" >
+                <input type="text" name="eusername" id="eusername"  class="form-control" required>
+                <input type="text"  hidden name="cusername" id="cusername"  class="form-control" required>
               </div>
              
 {% csrf_token %}
               <div class="col-md-6">
                 <label for="inputEmail4" class="form-label">Department</label>
-                <input type="text" name="edepartment" id="edepartment" class="form-control" >
+                <input type="text" name="edepartment" id="edepartment" class="form-control" required>
               </div>
               <div class="col-md-6">
 
@@ -578,7 +642,7 @@
                   <div class="form-check">
                     <input class="form-check-input"  name="eopncourse" type="checkbox" id="eopncourse">
                     <label class="form-check-label" for="gridCheck">
-                      Open Course
+                      Add student schedule
                     </label>
                   </div>
                 </div>
@@ -587,7 +651,7 @@
                   <div class="form-check">
                     <input class="form-check-input"  name="edeletecourse" type="checkbox" id="edeletecourse">
                     <label class="form-check-label" for="gridCheck">
-                      Delete Course
+                      Delete student schedule
                     </label>
                   </div>
                 </div>
@@ -643,8 +707,42 @@
       </div>
     </div>
   </div>
+{#  error occured#}
+        <button id="btn_error" hidden type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+        </button>
+
+        {% if error %}
+            <script>
+                window.onload = function (){
+                    document.getElementById('btn_error').click()
+                }
+            </script>
+        {% endif %}
+
+        <!-- Modal -->
+        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Failure occurred!</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body text-center">
+                  <b class="text-danger">
+                      {{ error }}
+                  </b>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-danger btn-sm" data-bs-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <script src="{% static 'js/bootstrap.bundle.min.v5.js' %}"></script>
+
   <!--  -->
   <!--  -->
+
   <script>
 let tbl=document.getElementById('tableins');
 for(var i=1 ;i < tbl.rows.length;i++)
@@ -653,8 +751,10 @@ for(var i=1 ;i < tbl.rows.length;i++)
         document.getElementById('efirstname').value =this.cells[0].innerHTML;
         document.getElementById('elastname').value = this.cells[1].innerHTML;
         document.getElementById('eusername').value =this.cells[2].innerHTML;
+        document.getElementById('cusername').value =this.cells[2].innerHTML;
         document.getElementById('eemail').value =this.cells[3].innerHTML;
-        
+        document.getElementById('cemail').value =this.cells[3].innerHTML;
+
         document.getElementById('edepartment').value =this.cells[4].innerHTML;
         // document.getElementById('etype').value=this.cells[6].innerHTML;
         console.log($(this.cells[7].innerHTML).prop("checked"))
@@ -681,10 +781,10 @@ for(var i=1 ;i < tbl.rows.length;i++)
 
             if (s.open_course) {
               $("#eopencourse").prop('checked', true);
-              console.log($("#a_admin").prop('checked'))
+              console.log($("#eopencourse").prop('checked'))
             } else {
               $("#eopencourse").prop('checked', false);
-              console.log($("#a_admin").prop('checked'))
+              console.log($("#eopencourse").prop('checked'))
             }
 
             if (s.delete_course) {
@@ -730,12 +830,12 @@ for(var i=1 ;i < tbl.rows.length;i++)
 
           }
         })
-    
-    
-    
+
+
+
       }
 
-    
+
 }
 
   </script>

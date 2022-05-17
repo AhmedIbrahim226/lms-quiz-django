@@ -35,7 +35,8 @@ INSTALLED_APPS = [
     'superuser',
     'instructor',
     'student',
-    
+    'parent',
+
     'quiz',
     'quiz_config',
 

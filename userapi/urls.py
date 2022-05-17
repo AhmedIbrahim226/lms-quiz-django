@@ -3,7 +3,8 @@ from . import views
 
 from .schedule_api import (
     InstructorScheduleView, MaterialSlideView,
-    CourseView, MaterialVideoView, TaskInstructorView
+    CourseView, MaterialVideoView, TaskInstructorView,
+    StudentScheduleView
 
 )
 
@@ -21,6 +22,7 @@ urlpatterns = [
 
     #### schedule spi
     path('schedule/instructor/', InstructorScheduleView.as_view()),
+    path('schedule/students/<schedule_name>/', StudentScheduleView.as_view()),
     path('schedule/course/<company_name>/<schedule_name>/', CourseView.as_view()),
 
     path('schedule/material/slide/<schedule_name>/', MaterialSlideView.as_view()),

@@ -17,7 +17,7 @@ urlpatterns = [
     path('adminCompany/Manage Schedule/<ScheduleName>/Deleted', views.delete_Schedule, name='delete_Schedule'),
     # management
     path('adminCompany/Manage Admin', views.manage_admin, name='manage_admin'),
-    path('adminCompany/Manage Admin/delete/<id>/<username>', views.deleteadmin, name='DeleteAdmin'),
+    path('adminCompany/Manage Admin/delete/<id>/<username>/', views.deleteadmin, name='DeleteAdmin'),
 
     path('adminCompany/Manage Instructor', views.manage_instructor, name='manage_instructor'),
     path('adminCompany/Manage Instructor/delete/<id>/<username>', views.deleteinstuctor, name='deleteinstuctor'),
@@ -27,14 +27,13 @@ urlpatterns = [
 
     path('adminCompany/Manage Parent', views.manage_parent, name='manage_parent'),
     path('adminCompany/Statistics', views.Statistics, name='Statistics'),
-    path('adminCompany/settings', views.settings, name='settings'),
     # Request User
     path('adminCompany/Request Instructor', views.Request_instructor, name='Request_instructor'),
     path('adminCompany/Request Student', views.Request_Student, name='Request_Student'),
 
     # profile Admin
+    path('adminCompany/Manage Schedule/<ScheduleName>/Post', views.admin_post,name='admin_post'),
 
-    path('adminCompany/Admin/Profile', views.profile_admin, name='profile_admin'),
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT )
 

@@ -1,19 +1,24 @@
 import random
 import re
 import string
+import datetime
 from smtplib import SMTPException
 
+import jwt
+from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import send_mail
+from django.http import JsonResponse
 from django.shortcuts import redirect, render
 from django.contrib.auth import login, authenticate, logout
+from django.urls import reverse
 
+from schedule.models import Schedule
 from .models import (
     AdminAccount, Company, InstructorAccount,
     StudentAccount, ParentAccount,
     SuperUserAccount, CompanyRequest
     )
 from userapi import utilities
-from django.http import JsonResponse
 
 
 def make_request(request):
@@ -29,10 +34,10 @@ def make_request(request):
         email                = request.POST.get('email')
         is_signup            = request.POST.get('is_signup')
         
-        if utilities.company_name_exists(company_name=company_name):
-            context['error_company_name'] = 'This company allready registered!'
+        if utilities.company_name_exists(company_name=company_name.capitalize()):
+            context['error'] = 'This company already registered!'
         elif utilities.company_contact_email_exists(contact_email=email):
-            context['error_company_email'] = 'This email allready registered!'
+            context['error'] = 'This email already registered!'
         else:
             if is_signup is not None:
                 # print(is_signup)
@@ -45,7 +50,7 @@ def make_request(request):
             print(end)
             
             CompanyRequest.objects.create(
-                company_name=company_name,
+                company_name=company_name.capitalize(),
                 admins_number=number_of_admin,
                 instrauctors_number=number_of_instructor,
                 students_number=number_of_student,
@@ -55,7 +60,23 @@ def make_request(request):
                 contact_email=email,
                 description=description,
             )
-            context['success_request'] = 'The check o your request may take a few minutes or days, so be prepared for our notifications!'
+            super_emails = SuperUserAccount.objects.all()
+            emails = [x.email for x in super_emails]
+
+            link_super = reverse('super-user-login')
+            send_mail(
+                'Message from KANEMY-LMS',
+                f'''
+                    New request occurred
+                    Please vist company requests to manage it
+
+                    With link:
+                    {'http://' + get_current_site(request).domain + link_super}
+                ''',
+                'bla@colon.com',
+                emails
+            )
+            context['success'] = 'The check o your request may take a few minutes or days, so be prepared for our notifications!'
             
         
         
@@ -314,13 +335,9 @@ def login_view(request, company_name, type_user):
                 user = authenticate(username=user_check.username, password=password)
 
                 if user is not None:
-                    if user.company_name == company_name:
                         print('parent logined')
                         login(request, user)
                         return redirect("parent_home")
-                    else:
-                        context['error_login'] = 'You can\'t login in this company'
-                        print('You can\'t login in this company')
                 else:
                     context['error_login'] = 'username or password not correct!'
                     print('username or password not correct!')
@@ -409,19 +426,19 @@ def sign_up_student_view(request , *args, **kwargs):
             confirm_password = request.POST.get("confirm_password")
 
             if utilities.username_exists(username=username):
-                context['username_error'] = 'This username exists!'
+                context['error'] = 'This username exists!'
 
             elif utilities.email_exists(email=email):
-                context['email_error'] = 'This email exists!'
+                context['error'] = 'This email exists!'
 
             expert_password = re.findall("[a-zA-Z]", password)
 
             if len(password) < 8:
-                context['error_pass'] = 'Your password must contain at least 8 characters.'
+                context['error'] = 'Your password must contain at least 8 characters.'
             elif not expert_password:
-                context['error_pass'] = 'Your password can’t be entirely numeric.'
+                context['error'] = 'Your password can’t be entirely numeric.'
             elif confirm_password != password:
-                context['error_pass'] = 'Your passwords not same!.'
+                context['error'] = 'Your passwords not same!.'
 
             else:
                 try:
@@ -493,7 +510,310 @@ def companies_view(request):
     companies = Company.objects.all()
     return render(request, 'users/companies_view.html', context={'companies': companies})
 
-        
+def edit_user_data(request):
+    if not request.user.is_authenticated:
+        return redirect('home')
+    context = {}
+    if AdminAccount.objects.filter(username=request.user.username).exists():
+        context["Schedule_company"] = Schedule.objects.filter(company_name=request.user.company_name)
+        context['username'] = request.user.username
+        context['email'] = request.user.email
+        context['first_name'] = request.user.first_name
+        context['last_name'] = request.user.last_name
+        context['admin_type'] = request.user.admin_type
+        context['company_name'] = request.user.company_name
+
+        if request.method == 'POST':
+            if utilities.username_exists_update(request.POST.get('username'), [request.user.username]):
+                context['error'] = 'Username exists before!'
+                print('error username')
+            elif utilities.email_exists_update(request.POST.get('email') , [request.user.email]):
+                context['error'] = 'Email exists before!'
+                print('error email')
+            else:
+                user = AdminAccount.objects.get(username=request.user.username)
+                user.username = request.POST.get('username')
+                user.email = request.POST.get('email')
+                user.first_name = request.POST.get('first_name')
+                user.last_name = request.POST.get('last_name')
+                user.save()
+                context['success'] = 'Your info updated!'
+        return render(request, 'users/edit_user_data.html', context=context)
+
+    elif InstructorAccount.objects.filter(username=request.user.username).exists():
+        if request.method == 'POST':
+
+            if utilities.username_exists_update(request.POST.get('username'), [request.user.username]):
+                context['error'] = 'Username exists before!'
+                print('error username')
+            elif utilities.email_exists_update(request.POST.get('email') , [request.user.email]):
+                context['error'] = 'Email exists before!'
+                print('error email')
+            else:
+                pass
+
+        return render(request, 'users/edit_user_data.html', context=context)
+
+    elif StudentAccount.objects.filter(username=request.user.username).exists():
+        if request.method == 'POST':
+
+            if utilities.username_exists_update(request.POST.get('username'), [request.user.username]):
+                context['error'] = 'Username exists before!'
+                print('error username')
+            elif utilities.email_exists_update(request.POST.get('email') , [request.user.email]):
+                context['error'] = 'Email exists before!'
+                print('error email')
+
+        return render(request, 'users/edit_user_data.html', context=context)
+
+    elif ParentAccount.objects.filter(username=request.user.username).exists():
+        if request.method == 'POST':
+
+            if utilities.username_exists_update(request.POST.get('username'), [request.user.username]):
+                context['error'] = 'Username exists before!'
+                print('error username')
+            elif utilities.email_exists_update(request.POST.get('email') , [request.user.email]):
+                context['error'] = 'Email exists before!'
+                print('error email')
+
+        return render(request, 'users/edit_user_data.html', context=context)
+
+
+
+def edit_user_pass(request):
+    context = {}
+    user = request.user
+
+    if AdminAccount.objects.filter(username=user.username).exists():
+        context['type'] = 'admin'
+        context["Schedule_company"] = Schedule.objects.filter(company_name=request.user.company_name)
+
+        if request.method == 'POST':
+            old_pass = request.POST.get('old_pass')
+            new_pass = request.POST.get('new_pass')
+            con_pass = request.POST.get('con_pass')
+            if not user.check_password(old_pass):
+                context['error'] = 'Wrong old password'
+
+            expert_password = re.findall("[a-zA-Z]", con_pass)
+            if len(con_pass) < 8:
+                context['error'] = 'Your password must contain at least 8 characters.'
+            elif not expert_password:
+                context['error'] = 'Your password can’t be entirely numeric.'
+            elif con_pass != new_pass:
+                context['error'] = 'Your passwords not same!.'
+
+            else:
+                user.set_password(con_pass)
+                user.save()
+                context['success'] = 'Success updated password!'
+
+    elif InstructorAccount.objects.filter(username=request.user.username).exists():
+        context['type'] = 'inst'
+    elif StudentAccount.objects.filter(username=request.user.username).exists():
+        context['type'] = 'student'
+    elif ParentAccount.objects.filter(username=request.user.username).exists():
+        context['type'] = 'parent'
+
+    return render(request, 'users/edit_my_pass.html', context=context)
+
+
+def request_password_reset(request):
+    if request.method == 'POST':
+
+        email = request.POST.get('req_email')
+
+        if SuperUserAccount.objects.filter(email=email).exists():
+
+            user = SuperUserAccount.objects.get(email=email).username
+            payload2 = {
+                'id': user,
+                'exp': datetime.datetime.utcnow() + datetime.timedelta(days=30),
+                'iat': datetime.datetime.utcnow()
+            }
+            token = jwt.encode(payload=payload2, key='Key2', algorithm='HS256')
+            revers_link = reverse('password_reset_complete', kwargs={'token': token})
+            send_mail(
+                'Reset your password with KANEMY-LMS',
+                'Hello, \n Use link below to reset your password \n' + 'http://'+get_current_site(request).domain + revers_link,
+                'bla@colon.com',
+                [email]
+            )
+
+        elif AdminAccount.objects.filter(email=email).exists():
+
+            user = AdminAccount.objects.get(email=email).username
+            payload2 = {
+                'id': user,
+                'exp': datetime.datetime.utcnow() + datetime.timedelta(days=30),
+                'iat': datetime.datetime.utcnow()
+            }
+            token = jwt.encode(payload=payload2, key='Key2', algorithm='HS256')
+            revers_link = reverse('password_reset_complete', kwargs={'token': token})
+            send_mail(
+                'Reset your password with KANEMY-LMS',
+                'Hello, \n Use link below to reset your password \n' +  'http://'+get_current_site(request).domain + revers_link,
+                'bla@colon.com',
+                [email]
+            )
+
+        elif InstructorAccount.objects.filter(email=email).exists():
+
+            user = InstructorAccount.objects.get(email=email).username
+            payload2 = {
+                'id': user,
+                'exp': datetime.datetime.utcnow() + datetime.timedelta(days=30),
+                'iat': datetime.datetime.utcnow()
+            }
+            token = jwt.encode(payload=payload2, key='Key2', algorithm='HS256')
+            revers_link = reverse('password_reset_complete', kwargs={'token': token})
+            send_mail(
+                'Reset your password with KANEMY-LMS',
+                'Hello, \n Use link below to reset your password \n' +  'http://'+get_current_site(request).domain + revers_link,
+                'bla@colon.com',
+                [email]
+            )
+
+        elif StudentAccount.objects.filter(email=email).exists():
+
+            user = StudentAccount.objects.get(email=email).username
+            payload2 = {
+                'id': user,
+                'exp': datetime.datetime.utcnow() + datetime.timedelta(days=30),
+                'iat': datetime.datetime.utcnow()
+            }
+            token = jwt.encode(payload=payload2, key='Key2', algorithm='HS256')
+            revers_link = reverse('password_reset_complete', kwargs={'token': token})
+            send_mail(
+                'Reset your password with KANEMY-LMS',
+                'Hello, \n Use link below to reset your password \n' +  'http://'+get_current_site(request).domain + revers_link,
+                'bla@colon.com',
+                [email]
+            )
+
+        elif ParentAccount.objects.filter(email=email).exists():
+
+            user = ParentAccount.objects.get(email=email).username
+            payload2 = {
+                'id': user,
+                'exp': datetime.datetime.utcnow() + datetime.timedelta(days=30),
+                'iat': datetime.datetime.utcnow()
+            }
+            token = jwt.encode(payload=payload2, key='Key2', algorithm='HS256')
+            revers_link = reverse('password_reset_complete', kwargs={'token': token})
+            send_mail(
+                'Reset your password with KANEMY-LMS',
+                'Hello, \n Use link below to reset your password \n' +  'http://'+get_current_site(request).domain + revers_link,
+                'bla@colon.com',
+                [email]
+            )
+
+        return JsonResponse({'success': f'We sen instructions please check {email} to complete reset password'})
+
+
+def reset_complete(request, token):
+    context = dict()
+
+    if request.method == 'POST':
+        password = request.POST.get('password')
+        confirm_password = request.POST.get('confirm_password')
+
+        print(password)
+        print(confirm_password)
+
+        decode_token = jwt.decode(token, key='Key2', algorithms='HS256')
+        print(decode_token)
+        username = decode_token['id']
+        print(username)
+
+        if SuperUserAccount.objects.filter(username=username).exists():
+
+            user = SuperUserAccount.objects.get(username=username)
+
+            expert_password = re.findall("[a-zA-Z]", password)
+
+            if len(password) < 8:
+                context['error_pass'] = 'Your password must contain at least 8 characters.'
+            elif not expert_password:
+                context['error_pass'] = 'Your password can’t be entirely numeric.'
+            elif confirm_password != password:
+                context['error_pass'] = 'Your passwords not same!.'
+            else:
+                user.set_password(confirm_password)
+                user.save()
+                context['success'] = 'Successfully Your password assigned'
+
+
+
+        elif AdminAccount.objects.filter(username=username).exists():
+
+            user = AdminAccount.objects.get(username=username)
+
+            expert_password = re.findall("[a-zA-Z]", password)
+
+            if len(password) < 8:
+                context['error_pass'] = 'Your password must contain at least 8 characters.'
+            elif not expert_password:
+                context['error_pass'] = 'Your password can’t be entirely numeric.'
+            elif confirm_password != password:
+                context['error_pass'] = 'Your passwords not same!.'
+            else:
+                user.set_password(confirm_password)
+                user.save()
+                context['success'] = 'Successfully Your password assigned'
+
+        elif InstructorAccount.objects.filter(username=username).exists():
+
+            user = InstructorAccount.objects.get(username=username)
+
+            expert_password = re.findall("[a-zA-Z]", password)
+
+            if len(password) < 8:
+                context['error_pass'] = 'Your password must contain at least 8 characters.'
+            elif not expert_password:
+                context['error_pass'] = 'Your password can’t be entirely numeric.'
+            elif confirm_password != password:
+                context['error_pass'] = 'Your passwords not same!.'
+            else:
+                user.set_password(confirm_password)
+                user.save()
+                context['success'] = 'Successfully Your password assigned'
+
+        elif StudentAccount.objects.filter(username=username).exists():
+
+            user = StudentAccount.objects.get(username=username)
+
+            expert_password = re.findall("[a-zA-Z]", password)
+
+            if len(password) < 8:
+                context['error_pass'] = 'Your password must contain at least 8 characters.'
+            elif not expert_password:
+                context['error_pass'] = 'Your password can’t be entirely numeric.'
+            elif confirm_password != password:
+                context['error_pass'] = 'Your passwords not same!.'
+            else:
+                user.set_password(confirm_password)
+                user.save()
+                context['success'] = 'Successfully Your password assigned'
+
+        elif ParentAccount.objects.filter(username=username).exists():
+
+            user = ParentAccount.objects.get(username=username)
+
+            expert_password = re.findall("[a-zA-Z]", password)
+
+            if len(password) < 8:
+                context['error_pass'] = 'Your password must contain at least 8 characters.'
+            elif not expert_password:
+                context['error_pass'] = 'Your password can’t be entirely numeric.'
+            elif confirm_password != password:
+                context['error_pass'] = 'Your passwords not same!.'
+            else:
+                user.set_password(confirm_password)
+                user.save()
+                context['success'] = 'Successfully Your password assigned'
+    return render(request, 'users/reset_password_complete.html', context=context)
+
 
 def logout_view(request):
     logout(request)

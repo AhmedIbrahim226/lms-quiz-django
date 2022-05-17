@@ -8,7 +8,6 @@ urlpatterns = [
     # ---- ins---
     path('Home/', views.instructor_home, name='instructor_home'),
     path('Schedule/', views.Schedule_home, name='Schedule_home'),
-    path('Settings/', views.Settings, name='Settings'),
     path('Schedule/<Schedule_Name>/Material', views.instructor_Material, name='instructor_Material'),
     path('Schedule/<Schedule_Name>/Task', views.instructor_Task, name='instructor_Task'),
 
@@ -20,8 +19,9 @@ urlpatterns = [
          name='detet_task_ans'),
     path('Schedule/<Schedule_Name>/view_student', views.std_open_Schedule, name='std_open_Schedule'),
     path('Schedule/<Schedule_Name>', views.Schedule_view, name='Schedule_Instructor'),
-    path('Schedule/Material/view', views.view_Material, name='view_Material'),
-    path('Schedule/<Schedule_Name>/<username>/report', views.report, name='report'),
+    path('instructor/Schedule/<Schedule_Name>/<username>/report',views.report ,name='report'),
+    path('instructor/Schedule/<Schedule_Name>/Post',views.post_ins ,name='post_ins'),
+    path('instructor/Schedule/<Schedule_Name>/ADD Schedule Student',views.Schedule_student ,name='Schedule_student'),
 
 ]
 if settings.DEBUG:

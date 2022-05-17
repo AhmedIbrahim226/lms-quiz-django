@@ -21,5 +21,5 @@ urlpatterns = [
 
     
     path('reports/<schedule_name>/', views.quizes_report_view, name='reports-view'),
-    path('report/<id>/', views.report_view, name='report'),
+    path('report/<id>/<schedule_name>/', views.report_view, name='report-one'),
 ]

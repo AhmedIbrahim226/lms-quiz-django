@@ -76,6 +76,10 @@
   </div>
 
   <script>
+	let cus_nav = document.getElementById('cus_nav')
+	cus_nav.classList.remove('animy')
+	cus_nav.classList.add('bg-dark')
+
 	  const loc = window.location.origin
 
 	  let q_class = document.getElementsByClassName('q_class')
@@ -96,6 +100,7 @@
 	  }
 
 	  window.onload = function(){
+
 		  $('#blog').addClass('now')
 	  }
 

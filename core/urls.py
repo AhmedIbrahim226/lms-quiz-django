@@ -15,6 +15,7 @@ urlpatterns = [
     path('', include('admin_controle.urls')),
     path('instructor/', include('instructor.urls')),
     path('student/', include('student.urls')),
+    path('Parent/', include('parent.url')),
 
 
     path('quiz-conf/', include('quiz_config.urls')),

@@ -8,7 +8,8 @@
     <link rel="stylesheet" href="{% static 'style.css' %}">
     <link rel="stylesheet" href="{% static 'sidebar.css' %}">
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
-    <link rel="stylesheet" href="{% static 'css/bootstrap-grid.css' %}">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
+
     <link href='https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css' rel='stylesheet'>
     <!-- CSS only -->
     <script src="{% static 'js/jquery-min.js' %}"></script>
@@ -74,28 +75,20 @@
               <hr>
       
       </li>
-  
-     <li>
-          <a href="#">
-              <i class='bx bx-cog' ></i>
-              <span class="links_name">Setting</span>
-          </a>
-          <span class="tooltip">Setting</span>
 
-      </li>
       
   
   </ul>
   <div class="profile_content">
       <div class="profile">
           <div class="profile_details">
-              <img src="" alt="">
+            <img src="{% static 'iconins.png' %}" alt="">
               <div class="name_job">
                   <div class="name"> {{user.first_name }} {{ user.last_name}} </div>
                   <div class="job">{{user.instructor_type}}</div>
               </div>
           </div>
-          <i class='bx bx-log-out' id="log_out"></i>
+          <a href="{% url 'logout-view' %}" class="text-white"><i class='bx bx-log-out' id="log_out"></i></a>
       </div>
   </div>
 </div>
@@ -108,14 +101,14 @@
         
         <header>
           <center>
-          <div class="px-3 py-2  btn-dark btn bg-dark text-white">
+          <div class="px-3 py-2 bg-dark_blue text-white">
             <div class="container">
               <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
                 
       
                 <ul class="nav col-12 col-lg-auto my-2 justify-content-center my-md-0 text-small">
                   <li>
-                    <a href="#" class="nav-link text-secondary">
+                    <a href="{% url 'instructor_home' %}" class="nav-link text-white">
                       Home
                     </a>
                   </li>
@@ -140,21 +133,12 @@
                     </div>
                   </li>
                   <li>
-                    <a href="{% url 'Settings' %}" class="nav-link text-white">
-                      Settings
-                    </a>
-                  </li>
-                  <li>
                    
                   </li>
                   
                   
                 </ul>
                 <div class=" text-end" >
-                <ul class="nav " >
-                  <li class="nav-item"><a href="{% url 'logout-view' %}" class="nav-link link-dark px-2">Log Out</a></li>
-                  
-                </ul>
               </div>
               </div>
               
@@ -163,26 +147,34 @@
         </center>
           
         </header>
-        <div id="content"  class=" d-flex justify-content-center py-4 scroll" >
-          
-        
-          <div id="requestcompany" >
-            
-            
-          
-           
-          </div>
 
-   <!-- <div class="dropdown-divider"></div> -->
-        
-        
+
+        <div id="content"  class="" >
+
+            <div class="row" style="height: 100%">
+
+                <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 justify-content-center" style="text-align: left; margin-top: 180px; padding: 100px">
+                    <p class="text-left" style="font-size: 3.5rem;margin-left: 50px;  font-family: "Poppins", Arial, sans-serif;" > Instructor </p>
+                    <p class="text-muted" style="font-size: 1.25rem; margin-left: 50px; font-family: "Source Sans Pro", Helvetica, sans-serif;">
+                        can be management material (Slides - Videos)
+                        can be management Post
+                        View Task and Add degree Task
+                        View Student And schedule.
+                        Quizzes can add and delete student Schedule. <br><br>
+                        Can make awesome things with the company as sub admin if you have som of his permissions
+                    </p>
+                </div>
+
+                <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12">
+                    <img src="{% static 'photo/instructor_home.jpg' %}" width="100%" height="100%">
+                </div>
+            </div>
           
         </div>
 
       </div>
       
 		</div>
- 
 
 <script>
  let btn = document.querySelector('#btn')

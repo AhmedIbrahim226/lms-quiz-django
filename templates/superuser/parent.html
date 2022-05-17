@@ -22,7 +22,6 @@
 					<th>Id national</th>
 					<th>Active</th>
 
-					<th></th>
 				</tr>
 			</thead>
 			<tbody>
@@ -36,9 +35,6 @@
 						<td>{{data.last_login}}</td>
 						<td>{{data.national_id}}</td>
 						<td>{{data.is_active}}</td>
-
-
-						<td><a class="btn btn-light" href="{% url 'super-del-parent' data.id %}">Delete</a></td>
 
 					</tr>
 				{% endfor %}

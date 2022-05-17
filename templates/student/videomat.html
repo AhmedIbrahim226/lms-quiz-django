@@ -4,20 +4,20 @@
   	<title>mat{{Schedule_Name}}</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-{% comment %}
-<link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900" rel="stylesheet">
-		
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 
-{% endcomment %}
+<link href='https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css' rel='stylesheet'>
+<link  rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.1.1/css/all.css"> 
+<link rel="shortcut icon" href="{% static 'icons8-k-64.png' %}" type="image/x-icon">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+
     <link rel="stylesheet" href="{% static 'style.css' %}">
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
     <script src="{% static 'js/jquery-min.js' %}"></script>
-    <!-- <script src="{% static 'js/bootstrap.min.js' %}"></script> -->
     <script src="{% static 'js/popper.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'sidebar.css' %}">
 
-    <script src="{% static 'js/bootstrap.bundle.js' %}"></script>
-    <script src="{% static 'ajax-js.js' %}"></script>
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.bundle.min.v5.js' %}"></script>
     <style>
       .scroll ::-webkit-scrollbar{
         width: 0px;
@@ -43,9 +43,10 @@
       }
       .containe .main-video-container {
         flex:1 1 1 600;
-        border-radius:5px;
+        border-radius:20px;
+        border :white 10px double;
         box-shadow: 0 5px 15px rgba(0, 0, 0, .1);
-        background-color: #fff;
+        background-color: #11101d;
         padding: 15px;
 
       }
@@ -57,17 +58,18 @@
       }
       .containe .main-video-container .main-vid-title{
         font-size: 20px;
-        color: #444;
+        color: rgb(242, 241, 241);
 
       }
         .containe .video-list-container{
           flex:1 1 250px;
-          height: 485px;
+          height: 462px;
           overflow-y: scroll;
-
-        border-radius:5px;
+          border-radius:20px;
+        border :white 10px double;
+        
         box-shadow: 0 5px 15px rgba(0, 0, 0, .1);
-        background-color: #fff;
+        background-color: #11101d;
         padding: 15px;
         }
         .containe .video-list-container .list .list-video {
@@ -117,128 +119,139 @@
 text-align: center;
       }
       }
+ 
+.ul.breadcrumb {
+  padding: 10px 16px;
+  list-style: none;
+  background-color: #11101d;
+}
+
+      .ul.breadcrumb .li {
+  display: inline;
+  font-size: 18px;
+  color:rgb(69, 171, 255) ;
+}
+
+/* Add a slash symbol (/) before/behind each list item */
+.ul.breadcrumb .li+.li:before {
+  padding: 8px;
+  color: rgb(255, 251, 251);
+  content: "/\00a0";
+}
+
+/* Add a color to all links inside the list */
+.ul.breadcrumb .li .a {
+  color: #ffffff;
+  text-decoration: none;
+}
+
+/* Add a color on mouse-over */
+.ul.breadcrumb .li .a:hover {
+  color: #b3d6f4;
+  text-decoration: underline;
+}
      </style>
   </head>
   <body class="scroll">
-		
-		<div class="wrapper d-flex align-items-stretch">
-			<nav id="sidebar">
-				
-	  		<h1><a href="index.html" class="logo">Project Name</a></h1>
-        <ul class="list-unstyled components mb-5">
-          <li class="active">
-            <a href="{% url 'student_home' %}"> Homepage</a>
-          </li>
-          
-         
-         {% for StudentSchedule in StudentSchedule %}
-         
-         <li > <a href="{% url 'Schedule' StudentSchedule.student_schedule_name %}"> {{StudentSchedule.student_schedule_name}}</a></li>
-         {% endfor %}
-           
-
-          {% comment %}
-          <li>
-            <a href="#"> Courses</a>
-          </li>
-          {% endcomment %}
-          <li>
-            <a href="#"> Settings</a>
-          </li>
-         
-          <li>
-            <a href="#"> Information</a>
-          </li>
-        </ul>
-
-    	</nav>
-
-        <!-- Page Content  -->
-      <div id="content" class=" ">
+    <div class="sidebar">
+      <div class="logo_content">
+        <div class="logo">
+          <i class='bx bxl-kickstarter'></i>
+          <div class="logo_name">
+            anemy Lms
+          </div>
+          <br>
+  
+        </div>
+        <i class='bx bx-menu' id="btn"></i>
+      </div>
+      <ul class="nav_list">
+  
+        <li>
+  
+          <a href="{% url 'student_home' %}">
+            <i class='bx bxs-home'></i>
+            <span class="links_name">Home</span>
+          </a>
+          <span class="tooltip">Home</span>
+          <hr>
+  
+        </li>
         
-        <header>
-          <center>
-          <div class="px-3 py-2 bg-dark text-white">
-            <div class="container">
-              <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-                <a href="/" class="d-flex align-items-center my-2 my-lg-0 me-lg-auto text-white text-decoration-none">
-                </a>
-      
-                <ul class="nav col-12 col-lg-auto my-2 justify-content-center my-md-0 text-small">
-                  <li>
-                    <a href="#" class="nav-link text-secondary">
-                      Home
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#" class="nav-link text-white">
-                      Dashboard
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#" class="nav-link text-white">
-                      Orders
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#" class="nav-link text-white">
-                      Products
-                    </a>
-                  </li>
-                  
-                  
-                </ul>
-                <div class=" text-end" >
-                <ul class="nav " >
-                  <li class="nav-item"><a href="{% url 'logout-view' %}" class="nav-link link-dark px-2">Log Out</a></li>
-                  
-                </ul>
-              </div>
-              </div>
-              
+       
+        <li>
+          <a href="{% url 'schedule_home' %}">
+            <i class='bx bx-table'></i>
+            <span class="links_name">Schedule</span>
+          </a>
+          <span class="tooltip">Schedule</span>
+          <hr>
+  
+        </li>
+  
+   
+      </ul>
+      <div class="profile_content">
+        <div class="profile">
+          <div class="profile_details">
+            <img src="{% static 'std_profile.png'%}" alt=" image ">
+            <div class="name_job">
+              <div class="name"><a title="Profile" href="">{{user.first_name }} {{ user.last_name}}</a> </div>
+              <div class="job">{{user.instructor_type}}</div>
             </div>
           </div>
-        </center>
-          <div class="px-3 py-2 border-bottom mb-3">
-            <div class="container d-flex flex-wrap justify-content-center">
-              
+          <a href="{% url 'logout-view' %}"><i class='bx bx-log-out' id="log_out"></i></a>
+        </div>
+      </div>
+    </div>
+     
+    <script>
+       
+      let btn = document.querySelector('#btn')
+     let sidebar = document.querySelector('.sidebar')
+  
+     btn.onclick = function () {
+       sidebar.classList.toggle('active')
+     }
+  
+    </script>
+    
+		<div class="wrapper  align-items-stretch home_content">
+		
+      <ul class="ul breadcrumb ">
+        <li class="li"><a class="a"  href="">Home</a></li>
+        <li  class="li" ><a class="a" href="{% url 'schedule_home' %}">Schedule</a></li>
+        <li  class="li"><a class="a" href="{% url 'Schedule' ScheduleStudent %}">{{ScheduleStudent}}</a></li>
+        <li  class="li" >Material Video</li>
+      </ul>
       
-              <div class="text-end">
-                <center><b>welcome {{user.instructor_type}} : {{user.first_name }} {{ user.last_name}} </b></center>
-              </div>
-              
-            </div>
-          </div>
-        </header>
-        <div id="content"  class=" d-flex justify-content-center py-4 " >
+        <!-- Page Content  -->
+      
+        <h1 class="text-center" style="margin-top: 100px">{{ ScheduleStudent| capfirst }} material video</h1>
+        <div id="content"  class=" d-flex justify-content-center py-4" style="margin-top: 50px">
           
-          <div id="requestcompanymass" style="width: 1000px ; overflow: scroll; height: 900px;">
+          <div id="requestcompanymass" style="width: 1000px ; overflow: scroll; height: 700px;">
           <div class="containe">
             <div class="main-video-container">
             <!-- style="height: 900px;" -->
             
-              <video loop controls autoplay style="height: 250px;"
+              <video loop controls autoplay style="height:350px ;width: 600px;"
                src="/media/5%20%D8%B7%D8%B1%D9%8A%D9%82%D9%83%20%D9%84%D8%A5%D8%AD%D8%AA%D8%B1%D8%A7%D9%81%20%D9%82%D9%88%D8%A7%D8%B9%D8%AF%20%D8%A7%D9%84%D8%A8%D9%8A%D8%A7%D9%86%D8%A7%D8%AA%20-%20%D8%AA%D9%86%D8%B5%D9%8A%D8%A8%20%D8%A8%D8%B9%D8%B6%20%D8%A7%D9%84%D9%86%D9%85%D8%A7%D8%B0%D8%AC%20%D8%A7%D9%84%D8%AC%D8%A7%D9%87%D8%B2%D8%A9%20%D9%84%D9%82%D9%88%D8%A7%D8%B9%D8%AF%20%D8%A7%D9%84%D8%A8%D9%8A%D8%A7%D9%86%D8%A7%D8%AA%20%20Databases%20samples(720P_HD).mp4" 
                class="main-video"></video>
-              <h3 class="main-vid-title"> welcomee  </h3>
+             
+               <br> <br>
+              <h3 class="main-vid-title">  welcomee  </h3>
            
           </div>
           <div class="video-list-container">
            
           {% for Material_video in Material_video %}
           <!-- https://www.youtube.com/embed/9XDF7QB07Jg -->
-          
-          {% if Material_video.material_is_link %}
+
           <div class="list">
-            <video src="{{Material_video.lecture_video_link}}" class="list-video"></video>
+            <video src="{{Material_video.lecture_video.url}}" class="list-video"></video>
             <h6 class="list-title"> {{Material_video.material_name}} </h6>
           </div>
-          {% else %}
-          <div class="list">
-            <video src="{{Material_video.lecture_video}}" class="list-video"></video>
-            <h6 class="list-title"> {{Material_video.material_name}} </h6>
-          </div>
-          {% endif %}
             
             
            
@@ -255,20 +268,19 @@ text-align: center;
 <script>
 
 let vl=document.querySelectorAll(" .video-list-container .list");
-
+$(".main-video-container").hide();
 vl.forEach(vid=>{
  
   vid.onclick = () =>{
     let src=vid.querySelector(".list-video").src;
     let title=vid.querySelector(".list-title").innerHTML;
-    document.querySelector(".main-video-container .main-vid-title").innerHTML=title +'<a href='+src+' download='+title+'>  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down-square-fill" viewBox="0 0 16 16">'+
-      '<path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm6.5 4.5v5.793l2.146-2.147a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 1 1 .708-.708L7.5 10.293V4.5a.5.5 0 0 1 1 0z"/></svg></a>';
+    document.querySelector(".main-video-container .main-vid-title").innerHTML='&emsp;'+title +'&emsp; &emsp;  <a href='+src+' download='+title+'>  <i class="fa-solid fa-down-to-bracket"></i></a>';
    
     let vsrc = document.querySelector(".main-video-container .main-video").src=src ;
 
-    document.querySelector(".main-video-container .main-video").play();
-    
-    
+    document.querySelector(".main-video-container .main-video").play();   
+    $(".main-video-container").show();
+
   }
 })
 

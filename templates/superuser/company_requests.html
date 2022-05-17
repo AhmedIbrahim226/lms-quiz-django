@@ -20,6 +20,7 @@
 					<th>Contact e-mail</th>
 					<th>Status</th>
 					<th>Manage</th>
+					<th>Del</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -35,6 +36,7 @@
 						<td>{{data.contact_email}}</td>
 						<td>{{data.status}}</td>
 						<td><a class="btn btn-light" data-bs-toggle="modal" href="#exampleModalToggle" role="button" id="manageId" data_id="{{data.id}}">Manage</a></td>
+                        <td><a href="{% url 'super-user-del-requests' data.id %}" class="btn btn-danger">Remove</a> </td>
 				  </tr>
 				{% endfor %}
 	

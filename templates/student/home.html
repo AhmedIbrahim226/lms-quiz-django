@@ -1,7 +1,7 @@
 {% load  static %}
 <html lang="en">
   <head>
-  	<title>home instructor</title>
+  	<title>Kanemy Lms</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 {% comment %}
@@ -10,14 +10,22 @@
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 
 {% endcomment %}
-    <link rel="stylesheet" href="{% static 'style.css' %}">
-    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
-    <script src="{% static 'js/jquery-min.js' %}"></script>
-    <!-- <script src="{% static 'js/bootstrap.min.js' %}"></script> -->
-    <script src="{% static 'js/popper.js' %}"></script>
+<link rel="stylesheet" href="{% static 'style.css' %}">
+<link rel="stylesheet" href="{% static 'sidebar.css' %}">
+<link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+<link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
+<link rel="stylesheet" href="{% static 'css/bootstrap-grid.min.css' %}">
+<!-- <link rel="stylesheet" href="{% static 'schedule_home.css' %}"> -->
+<link href='https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css' rel='stylesheet'>
+<!-- CSS only -->
+<link  rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.1.1/css/all.css"> 
+<link rel="shortcut icon" href="{% static 'icons8-k-64.png' %}" type="image/x-icon">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+<script src="{% static 'js/jquery-min.js' %}"></script>
 
-    <script src="{% static 'js/bootstrap.bundle.js' %}"></script>
-    <script src="{% static 'ajax-js.js' %}"></script>
+<script src="{% static 'js/popper.js' %}"></script>
+<script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'js/bootstrap.bundle.min.v5.js' %}"></script>
     <style>
       .scroll ::-webkit-scrollbar{
         width: 0px;
@@ -36,175 +44,100 @@
      </style>
   </head>
   <body class="scroll">
-		
-		<div class="wrapper d-flex align-items-stretch">
-			<nav id="sidebar">
-				
-	  		<h1><a href="#"  class=" btn btn-dark logo">Project Name</a></h1>
-        <ul class="list-unstyled components mb-5">
-          <li class="active">
-            <a href="{% url 'student_home' %}"> Homepage</a>
+    <body scroll>
+    
+      <div class="sidebar">
+        <div class="logo_content">
+          <div class="logo">
+            <i class='bx bxl-kickstarter'></i>
+            <div class="logo_name">
+              anemy Lms
+            </div>
+            <br>
+    
+          </div>
+          <i class='bx bx-menu' id="btn"></i>
+        </div>
+        <ul class="nav_list">
+    
+          <li>
+    
+            <a href="{% url 'student_home' %}">
+              <i class='bx bxs-home'></i>
+              <span class="links_name">Home</span>
+            </a>
+            <span class="tooltip">Home</span>
+            <hr>
+    
           </li>
           
          
-         {% for StudentSchedule in StudentSchedule %}
-         
-        
-           <li >
-            
-           <a href="{% url 'Schedule' StudentSchedule.student_schedule_name %}"> {{StudentSchedule.student_schedule_name}}</a>
-   
-             </li>
-         {% endfor %}
-           
+          <li>
+            <a href="{% url 'schedule_home' %}">
+              <i class='bx bx-table'></i>
+              <span class="links_name">Schedule</span>
+            </a>
+            <span class="tooltip">Schedule</span>
+            <hr>
+    
+          </li>
 
-          {% comment %}
-          <li>
-            <a href="#"> Courses</a>
-          </li>
-          {% endcomment %}
-          <li>
-            <a href="#"> Settings</a>
-          </li>
-         
-          <li>
-            <a href="#"> Information</a>
-          </li>
         </ul>
-
-    	</nav>
-
-        <!-- Page Content  -->
-      <div id="content" class=" ">
-        <nav>
-        <header>
-          
-          <center>
-          <div class="px-3 py-2 bg-dark text-white">
-            <div class="container">
-              <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-                
-      
-                <ul class="nav col-12 col-lg-auto my-2 justify-content-center my-md-0 text-small">
-                  <li>
-                    <a href="#" class="nav-link text-secondary">
-                      Home
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#" class="nav-link text-white">
-                      Dashboard
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#" class="nav-link text-white">
-                      Orders
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#" class="nav-link text-white">
-                      Products
-                    </a>
-                  </li>
-                  
-                  
-                </ul>
-                <div class=" text-end" >
-                <ul class="nav " >
-                  <li class="nav-item"><a href="{% url 'logout-view' %}" class="nav-link link-dark px-2">Log Out</a></li>
-                  
-                </ul>
+        <div class="profile_content">
+          <div class="profile">
+            <div class="profile_details">
+              <img src="{% static 'std_profile.png'%}" alt=" image ">
+              <div class="name_job">
+                <div class="name"><a title="Profile" href="">{{user.first_name }} {{ user.last_name}}</a> </div>
+                <div class="job">{{user.instructor_type}}</div>
               </div>
-              </div>
-              
             </div>
+            <a href="{% url 'logout-view' %}"><i class='bx bx-log-out' id="log_out"></i></a>
           </div>
-        </center>
-          <div class="px-3 py-2 border-bottom mb-3">
-            <div class="container d-flex flex-wrap justify-content-center">
-              
-      
-              <div class="text-end">
-                <center><b>welcome {{user.instructor_type}} : {{user.first_name }} {{ user.last_name}} </b></center>
-              </div>
-              
-            </div>
-          </div>
-        </header>
-      </nav>
-        <div id="content"  class=" d-flex justify-content-center py-4 " >
-          
-          <div id="requestcompanymass">
-            
-          </div>
-          <div id="requestcompany"  style="display: inline;">
+        </div>
+      </div>
+       
+    
 
-           
-          </div>
-          {% comment %}
-          <video autoplay controls>
-            
-            {% for Material_video  in Material_video  %}
-            <source src="{{Material_video.lecture_video}}" >
-            {% endfor %}
-              
-            
-          </video>
-          {% endcomment %}  
-          
-         <br><br>
-        
-        
-          
+
+    
+
+      <div class="wrapper  align-items-stretch home_content">
+
+   
+        <div id="content">
+
+            <div class="row" style="height: 100%">
+
+                <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 justify-content-center" style="text-align: left; margin-top: 180px; padding: 100px">
+                    <p class="text-left" style="font-size: 3.5rem;margin-left: 50px;  font-family: "Poppins", Arial, sans-serif;" > Student </p>
+                    <p class="text-muted" style="font-size: 1.25rem; margin-left: 50px; font-family: "Source Sans Pro", Helvetica, sans-serif;">
+								can be viewed materials and
+								  download (Slides - videos)
+								  can be viewed Tasks and download (Task)
+								  And upload Answer Task
+								View post from Admin and instractour on schedule
+                    </p>
+                </div>
+
+                <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12">
+                    <img src="{% static 'photo/student_home.jpg' %}" width="100%" height="100%">
+                </div>
+            </div>
+
         </div>
 
-      </div>
-      
 		</div>
-    {% comment %}
-    {% for Material in Material_video %}
-    <video  src="{{ Material.lecture_video_link }}" width="200px" height="300px" >video</video ><br>
-    <a  href="{{ Material.lecture_video_link}}" download="{{ Material.lecture_video_link.url }}" >video</a ><br>
-    {% endfor %}
-    {% endcomment %}
-    
+  
 
-<script>
-function schedule(data) {  
-  if (data==null){
-    $.ajax({
-    url:window.location.origin+ "/instructor/Schedule",
-
-    success:function(req){
-      $("#requestcompany").html(req)
-    }
-    
-    });
-  } else if (data=="data"){
-    var d={
-    "get":"submit_schedule",
-    "Schedule_Name":$("#Schedule_Name").val(),
-    "instructor_schedule_name":$("#instructor_schedule_name").val(),
-    "student_schedule_name":$("#student_schedule_name").val(),
-    "course_name":$("#course_name").val(),
-    "quiz_name":$("#quiz_name").val(),
-    "task_name":$("#task_name").val(),
-    "material_name":$("#material_name").val(),
-    "post_title":$("#post_title").val(),
-    }
-    $.ajax({
-    url:window.location.origin+ "/instructor/Schedule",
-    data:d,
-    dataType:"json",
-    success:function(req){
-      $("#requestcompany").html(req)
-    }
-    
-    });
-  }
- 
-}
-
-</script>
+    <script>
+     
+      let btn = document.querySelector('#btn')
+     let sidebar = document.querySelector('.sidebar')
+  
+     btn.onclick = function () {
+       sidebar.classList.toggle('active')
+     }
+    </script>
   </body>
 </html>

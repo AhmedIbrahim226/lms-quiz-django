@@ -15,11 +15,16 @@
   <link rel="stylesheet" href="{% static 'style.css' %}">
   <link rel="stylesheet" href="{% static 'sidebar.css' %}">
   <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+  <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
+  <link rel="stylesheet" href="{% static 'css/bootstrap-grid.min.css' %}">
+  <link rel="stylesheet" href="{% static 'scheduleinstuector.css' %}">
 
+  <link rel="shortcut icon" href="{% static 'icons8-k-64.png' %}" type="image/x-icon">
   <link href='https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css' rel='stylesheet'>
   <!-- CSS only -->
-  <script src="{% static 'js/jquery-min.js' %}"></script>
-  
+  <script src="{% static 'js/jquery-3.5.1.min.js' %}"></script>
+  <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.1.1/css/all.css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
   <script src="{% static 'js/popper.js' %}"></script>
   <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
   <style>
@@ -52,264 +57,173 @@
       background-color: #fdfeff;
       border-color: #454b50;
     }
+    .ul.breadcrumb {
+        border-radius: 0px;
+  padding: 10px 16px;
+  list-style: none;
+  background-color: #11101d;
+}
+
+      .ul.breadcrumb .li {
+  display: inline;
+  font-size: 18px;
+  color:rgb(69, 171, 255) ;
+}
+
+/* Add a slash symbol (/) before/behind each list item */
+.ul.breadcrumb .li+.li:before {
+  padding: 8px;
+  color: rgb(255, 251, 251);
+  content: "/\00a0";
+}
+
+/* Add a color to all links inside the list */
+.ul.breadcrumb .li .a {
+  color: #ffffff;
+  text-decoration: none;
+}
+
+/* Add a color on mouse-over */
+.ul.breadcrumb .li .a:hover {
+  color: #b3d6f4;
+  text-decoration: underline;
+}
   </style>
+
 </head>
 
 <body class="scroll">
 
+
   <div class="sidebar">
     <div class="logo_content">
-        <div class="logo">
-          <i class='bx bxl-kickstarter'></i>
-            <div class="logo_name">
-               anemy Lms
-            </div>
-            <br>
-            
+      <div class="logo">
+        <i class='bx bxl-kickstarter'></i>
+        <div class="logo_name">
+          anemy Lms
         </div>
-        <i class='bx bx-menu' id="btn"></i>
+        <br>
+
+      </div>
+      <i class='bx bx-menu' id="btn"></i>
     </div>
     <ul class="nav_list">
-  
-        <li>
-         
-                <a href="{% url 'instructor_home' %}">
-                  <i class='bx bxs-home' ></i>
-                    <span class="links_name">Home</span>
-                </a>
-                 <span class="tooltip">Home</span>
-                 <hr>
-           
-        </li>
-        
-  
-        <li>
-                <a href="{% url 'Schedule_home' %}">
-                    <i class='bx bx-table' ></i>
-                    <span class="links_name">Schedule</span>
-                </a>
-                <span class="tooltip">Schedule</span>
-                <hr>
-        
-        </li>
-      
-        <li>
-            <a href="#">
-                <i class='bx bx-cog' ></i>
-                <span class="links_name">Setting</span>
-            </a>
-            <span class="tooltip">Setting</span>
-  
-        </li>
-        
-    
+
+      <li>
+
+        <a href="{% url 'instructor_home' %}">
+          <i class='bx bxs-home'></i>
+          <span class="links_name">Home</span>
+        </a>
+        <span class="tooltip">Home</span>
+        <hr>
+
+      </li>
+
+
+      <li>
+        <a href="{% url 'Schedule_home' %}">
+          <i class='bx bx-table'></i>
+          <span class="links_name">Schedule</span>
+        </a>
+        <span class="tooltip">Schedule</span>
+        <hr>
+
+      </li>
+
+      {% if ExtraPermissions.open_course %}
+      <li>
+        <a href="{% url 'Schedule_student' Schedule_Name %}">
+          <i class='fas fa-book-reader'></i>
+          <span class="links_name"> Student Schedule</span>
+        </a>
+        <span class="tooltip"> Student Schedule</span>
+        <hr>
+      </li>
+    {% endif %}
+
+
+
+
+
     </ul>
     <div class="profile_content">
-        <div class="profile">
-            <div class="profile_details">
-                <img src="https://icon-library.com/images/white-profile-icon/white-profile-icon-24.jpgPrifile" alt="">
-                <div class="name_job">
-                    <div class="name">Ahmed Ibrahim</div>
-                    <div class="job">Web Developer</div>
-                </div>
-            </div>
-            <i class='bx bx-log-out' id="log_out"></i>
+      <div class="profile">
+        <div class="profile_details">
+          <img src="{% static 'iconins.png' %}" alt="">
+          <div class="name_job">
+            <div class="name"> {{user.first_name }} {{ user.last_name}}</div>
+            <div class="job">{{user.instructor_type}}</div>
+          </div>
         </div>
+        <a href="{% url 'logout-view' %}"><i class='bx bx-log-out' id="log_out"></i></a>
+      </div>
     </div>
   </div>
-  
-  <div class="wrapper d-flex align-items-stretch home_content">
-    <div id="content" class=" ">
+
+  <div class="wrapper align-items-stretch home_content">
+    <div id="content" class=" justify-content-center " >
       <header>
-        <center>
-          <div class="px-3 py-2 bg-dark text-white">
-            <div class="container">
-              <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-                <a href="#" class="d-flex align-items-center my-2 my-lg-0 me-lg-auto text-white text-decoration-none">
-                </a>
-
-                <ul class="nav col-12 col-lg-auto my-2 justify-content-center my-md-0 text-small">
-                  <li>
-                    <a href="{% url 'instructor_home' %}" class="nav-link text-secondary">
-                     Home
-                    </a>
-                  </li>
-                  <li>
-                   
-                    <div class="dropdown ">
-                      <button class="btn dropdown-toggle nav-link text-white " type="button" id="triggerId" data-toggle="dropdown" aria-haspopup="true"
-                          aria-expanded="false">
-                          Schedule
-                    </button>
-                      <div class="dropdown-menu" aria-labelledby="triggerId">
-
-                        {% for instructor_Schedule in instructor_Schedule %}
-                          <div class="dropdown-divider"></div>
-                          <a class="dropdown-item" href="{% url 'Schedule_Instructor' instructor_Schedule.instructor_schedule_name %}">
-                            {{instructor_Schedule.instructor_schedule_name}}</a>
-                          <div class="dropdown-divider"></div>
-                        {% endfor %}
-                        
-                        
-                      </div>
-                    </div>
-                  </li>
-                  <li>
-                    <a href="{% url 'Settings' %}" class="nav-link text-white">
-                      Settings                   
-                    </a>
-                  </li>
-                
 
 
-                </ul>
-                <div class=" text-end">
-                  <ul class="nav ">
-                    <li class="nav-item"><a href="{% url 'logout-view' %}" class="nav-link link-dark px-2">Log Out</a></li>
 
-                  </ul>
-                </div>
-              </div>
+        <ul class="ul breadcrumb ">
+          <li class="li"><a class="a"  href="{% url 'instructor_home' %}">Home</a></li>
+          <li  class="li" ><a class="a" href="{% url 'Schedule_home' %}">Schedule</a></li>
+          <li  class="li">{{Schedule_Name}}</li>
 
-            </div>
-          </div>
-        </center>
-        <div class="px-3 py-2 border-bottom mb-3">
-          <div class="container d-flex flex-wrap justify-content-center">
-
-
-            <div class="text-end">
-              <center><b>welcome {{user.instructor_type}} : {{user.first_name }} {{ user.last_name}} </b></center>
-            </div>
-
-          </div>
-        </div>
+        </ul>
 
       </header>
 
-      <div id="content" class=" d-flex justify-content-center py-4 "
-      style="
-        border-radius: 10%;
-        background-color:  rgba(113, 114, 114, 0.041);
-        ">
+    <h1 class="text-center" style="margin-top: 100px">{{ Schedule_Name }} statistics</h1>
+      <div class="card1" style="margin-top: 100px">
 
-        <div id="requestcompanymass" >
-          <div class="d-grid gap-2" >
+        <div class="f">
 
-            <a href="{% url  'std_open_Schedule'  Schedule_Name  %}"  target="" rel="noopener noreferrer"
-            style="width: 290px;height: 62px; border-radius: 50%; text-align: center; font-size: x-large; "
-              class="btn btn-outline-secondary "
-            > Student Schedule
-          </a>
+          <h5> <p>Number of Student : {{count_std.std}}</p></h5>
+          <hr>
+          <h5> <p>Number of Vedio : {{count_std.Material}}</p></h5>
+          <hr>
+          <h5> <p>Number of Slide : {{count_std.Material_slide}}</p></h5>
+          <hr>
+          <h5> <p>Number of Task : {{count_std.task}}</p></h5>
+          <hr>
 
-            {% if ExtraPermissions.upload_materials %}
-            <div class="btn-group dropup"
-            style=" font-style: italic; font-size: x-large; "
-            >
-              
-              <button type="button" 
-              style="width: 180px;height: 60px; border-radius: 50%; text-align: center; font-style: italic; font-size: x-large; "
-              class="btn btn-outline-secondary dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              Materials
-              </button>
-              <div class="dropdown-menu">
-                <h6 class="dropdown-header">Mange Materials </h6>   
-                <a class="dropdown-item" href="{% url 'instructor_Material' Schedule_Name %}"> Materials </a>              
-                          
-                <div class="dropdown-divider"></div>
-                
-                
-              </div>
-            </div>
-            {% endif %}
-            {% if ExtraPermissions.add_task %}
-            <div class="btn-group dropup"
-            style=" font-style: italic; font-size: x-large; "
-            >
-           <button type="button" 
-              style="width: 180px;height: 60px; border-radius: 50%; text-align: center; font-style: italic; font-size: x-large; "
-              class="btn btn-outline-secondary dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              Task
-              </button>
-              <div class="dropdown-menu">
-                <h6 class="dropdown-header">Mange  Task</h6>
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="{% url 'instructor_Task' Schedule_Name %}">ADD Task</a>              
-                             
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="#">Task Degree</a>
+        </div>
+        <div class="b">
+         <h5><a  href="{% url  'std_open_Schedule'  Schedule_Name  %}"  target="" class=" dropdown-item "   >MY Student Schedule  </a></h5>
+          <hr>
+          {% if ExtraPermissions.upload_materials %}
 
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="{% url 'std_open_Schedule' Schedule_Name %} ">ADD Task Degree</a>
-                <div class="dropdown-divider"></div>
-              </div>
-            </div>
-            {% endif %}
-            
-            {% if ExtraPermissions.add_post %}
-            <div class="btn-group dropup"
-            style=" font-style: italic; font-size: x-large; "
-            >
-              
-              <button type="button" 
-              style="width: 180px;height: 60px; border-radius: 50%; text-align: center; font-style: italic; font-size: x-large; "
-              class="btn btn-outline-secondary dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-               ffff
-              </button>
-              <div class="dropdown-menu">
-                <a class="dropdown-item" href="#">Action</a>              
-                <!-- <h6 class="dropdown-header">Section header</h6> -->               
-                <div class="dropdown-divider"></div>
-               
-                
-              </div>
-            </div>
-            {% endif %}
-            {% if ExtraPermissions.add_quiz %}
-            <a href="{% url 'my-quizes-view' Schedule_Name %}" class="btn btn-outline-primary"
-              style="width: 180px;height: 60px; border-radius: 50%; text-align: center; font-style: italic; font-size: x-large; ">Quize</a>
-           <div class="btn-group dropup"
-           style=" font-style: italic; font-size: x-large; "
-           >
-             
-             <button type="button" 
-             style="width: 180px;height: 60px; border-radius: 50%; text-align: center; font-style: italic; font-size: x-large; "
-             class="btn btn-outline-secondary dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              ffff
-             </button>
-             <div class="dropdown-menu">
-               <a class="dropdown-item" href="#">Action</a>              
-               <!-- <h6 class="dropdown-header">Section header</h6> -->               
-               <div class="dropdown-divider"></div>
-               <a class="dropdown-item" href="#">After divider action</a>
-               
-             </div>
-           </div>
-              {% endif %}
+          <h5><a class="dropdown-item" href="{% url 'instructor_Material' Schedule_Name %}"> Materials </a></h5>
+          <hr>
 
-            <br><br>
-            <br><br>
-           <div class="card" style="font-style: oblique; font-family: Arial, Helvetica, sans-serif; font-size: 30px; width: 60%;
-           background-color: rgba(92, 97, 104, 0.205);
-           border-radius: 0% 20% 20% 0%;">
-             <div class="card-body">
-               <blockquote class="blockquote">
-                 <p>Number of Student : {{count_std.std}}</p>
-                 <HR>
-                 <p>Number of Material of Video : {{count_std.Material}}</p>
-                <HR>
-                 <p>Number of Material of Silde : {{count_std.Material_slide}}</p>
-                <HR>
-                 <p>Number of Task : {{count_std.task}}</p>
-                
-               </blockquote>
-             </div>
-           </div>
+          {% endif %}
+          {% if ExtraPermissions.add_task %}
+
+      <!-- <a class="dropdown-item" href="{% url 'std_open_Schedule' Schedule_Name %} ">ADD Task Degree</a> -->
+
+      <h5><a class="dropdown-item" href="{% url 'instructor_Task' Schedule_Name %}"> Task</a></h5>
+          <hr>
+      {% endif %}
+
+      {% if ExtraPermissions.add_post %}
+      <h5><a class="dropdown-item" href="{% url 'post_ins' Schedule_Name %}">Post</a></h5>
+          <hr>
+      {% endif %}
+      {% if ExtraPermissions.add_quiz %}
+      <h5><a class="dropdown-item" href="{% url 'my-quizes-view' Schedule_Name %}">Quizes</a></h5>
+      <hr>
+     {% endif %}
 
 
 
         </div>
+
       </div>
+
+    </div>
 
     </div>
   </div>
@@ -327,3 +241,6 @@
 </body>
 
 </html>
+
+
+
