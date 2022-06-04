@@ -5,12 +5,7 @@
   <title>Kanmey Lms</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  {% comment %}
-  <!-- <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900" rel="stylesheet"> -->
 
-  <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"> -->
-
-  {% endcomment %}
   <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.1.1/css/all.css">
 <link rel="shortcut icon" href="{% static 'icons8-k-64.png' %}" type="image/x-icon">
 <link rel="stylesheet" href="https://icons.getbootstrap.com/assets/font/bootstrap-icons.css">
@@ -273,14 +268,16 @@
 
     <!-- Page Content  -->
     <div id="content" class=" ">
-      <ul class="ul breadcrumb ">
+        <ul class="ul breadcrumb ">
         <li class="li"><a class="a"  href="{% url 'instructor_home' %}">Home</a></li>
         <li class="li">Schedule</li>
 
       </ul>
 
       <div id="content" class="  row  scroll   body ">
-        <div class=" container1 col-9 ">
+          <h1 class="text-center">Available schedules</h1>
+          <div class=" container1 col-9 " style="margin-top: -200px">
+
         <div id="requestcompanymass"  style="width: 100%; overflow: scroll;
          overflow-y: hidden;  overflow-x: visible ;padding: 10px;
          display: flex;flex-wrap: nowrap;

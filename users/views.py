@@ -16,8 +16,8 @@ from schedule.models import Schedule
 from .models import (
     AdminAccount, Company, InstructorAccount,
     StudentAccount, ParentAccount,
-    SuperUserAccount, CompanyRequest
-    )
+    SuperUserAccount, CompanyRequest, ExtraPermissions
+)
 from userapi import utilities
 
 
@@ -395,6 +395,9 @@ def sign_up_instructor_view(request, *args, **kwargs):
                 user.is_active = False
                 user.save()
 
+                ex_per = ExtraPermissions.objects.create(user_have_perm=username, company_name=company_name)
+                ex_per.save()
+
                 context['success'] = 'Your account created, wait your admin to activate your account.'
 
     return render(request, 'users/sign_up_instructor.html', context=context)
@@ -450,6 +453,7 @@ def sign_up_student_view(request , *args, **kwargs):
                         company_name=company_name,
                         department=department,
                         gender=gender,
+                        id_college=0,
                         age=age,
                         national_id=national_id,
                         parent_national_id=parent_national_id
@@ -537,6 +541,9 @@ def edit_user_data(request):
                 user.first_name = request.POST.get('first_name')
                 user.last_name = request.POST.get('last_name')
                 user.save()
+                ex_user = ExtraPermissions.objects.get(user_have_perm=request.user.username)
+                ex_user.user_have_perm = request.POST.get('username')
+                ex_user.save()
                 context['success'] = 'Your info updated!'
         return render(request, 'users/edit_user_data.html', context=context)
 
@@ -718,13 +725,12 @@ def reset_complete(request, token):
         password = request.POST.get('password')
         confirm_password = request.POST.get('confirm_password')
 
-        print(password)
-        print(confirm_password)
+
 
         decode_token = jwt.decode(token, key='Key2', algorithms='HS256')
-        print(decode_token)
+
         username = decode_token['id']
-        print(username)
+
 
         if SuperUserAccount.objects.filter(username=username).exists():
 

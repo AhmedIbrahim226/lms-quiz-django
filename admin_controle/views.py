@@ -1060,7 +1060,7 @@ def Request_Student(request):
 
     context={
          "Schedule_company" :Schedule.objects.filter(company_name=request.user.company_name),
-         "StudentAccount":StudentAccount.objects.filter(is_active=False,id_college=""),
+         "StudentAccount":StudentAccount.objects.filter(is_active=False,id_college="0"),
         "ExtraPermissions":ExtraPermissions.objects.get(user_have_perm = request.user.username),
     }
     return render (request,'admin/Request_Student.html',context)

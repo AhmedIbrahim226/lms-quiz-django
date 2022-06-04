@@ -67,7 +67,6 @@ def super_user_company_requests(request):
     context['comapny_requests'] = company_request
     
     if request.method == 'POST':
-        
         company_name 		 = request.POST.get('company_name')
         number_of_admin 	 = request.POST.get('number_of_admin')
         number_of_instructor = request.POST.get('number_of_instructor')
@@ -79,17 +78,15 @@ def super_user_company_requests(request):
         status 				 = request.POST.get('status')
         description			 = request.POST.get('description')
         company_id			 = request.POST.get('id')
-        
+
+        print(status)
+
         if status == 'approved':
-            if utilities.email_exists(email=email):
+            if utilities.superuser_request_company_email_exists(contact_email=email):
                 context['email_error'] = 'This email registered before!'
                 
             elif utilities.company_name_exists(company_name=company_name):
                 context['company_name_error'] = 'This email registered before!'
-                
-                
-            elif utilities.company_contact_email_exists(contact_email=email):
-                context['email_error'] = 'This email registered before!'
                 
             else:
                 

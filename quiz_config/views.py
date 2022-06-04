@@ -207,7 +207,9 @@ def edit_question(request, *args, **kwargs):
     if_theory_q = question.is_theory_question
     
     question_from = QuestionForm(instance=question)
-    
+
+    ins_schedule = InstructorSchedule.objects.filter(instructor_name=request.user.username)
+
     if request.method == 'POST':
         form = QuestionForm(request.POST, instance=question)
         if form.is_valid():
@@ -223,7 +225,8 @@ def edit_question(request, *args, **kwargs):
                       'open_form': True,
                       'if_theory_q': if_theory_q,
                       'question_from': question_from,
-                      'Schedule_name': schedule_name
+                      'Schedule_name': schedule_name,
+                      'instructor_Schedule': ins_schedule
                       }
                   )
 

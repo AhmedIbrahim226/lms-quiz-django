@@ -243,7 +243,7 @@
                 <tr>
                   <td scope="row">{{material.material_name}}</td>
                   <td>Video</td>
-                  <td><a href="{{ material.lecture_video}}" target="_blank" rel="noopener noreferrer">viwe</a></td>
+                  <td><a href="{{ material.lecture_video.url}}" target="_blank" rel="noopener noreferrer">viwe</a></td>
                   <td> <a href="{% url 'delete_material' material.Schedule_name material.id 'Video' %}">Delete</a> </td>
                 </tr>
                 {% endfor %}

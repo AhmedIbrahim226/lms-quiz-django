@@ -223,7 +223,7 @@ class StudentAccount(AbstractBaseUser):
     first_name         = models.CharField(max_length=50)
     last_name          = models.CharField(max_length=50)
     company_name       = models.CharField(max_length=70)
-    id_college         = models.CharField(max_length=20)
+    id_college         = models.CharField(max_length=20, null=True, blank=True)
     department         = models.CharField(max_length=50)
     gender             = models.CharField(max_length=10, choices=GENDER_TYPE, default=GENDER_TYPE[1][0])
     age                = models.IntegerField()

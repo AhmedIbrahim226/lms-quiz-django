@@ -91,3 +91,17 @@ def company_contact_email_exists(contact_email):
         return True
     else:
         return False
+
+
+def superuser_request_company_email_exists(contact_email):
+    if (
+            Company.objects.filter(contact_email=contact_email).exists() or
+            SuperUserAccount.objects.filter(email=contact_email).exists() or
+            AdminAccount.objects.filter(email=contact_email).exists() or
+            InstructorAccount.objects.filter(email=contact_email).exists() or
+            StudentAccount.objects.filter(email=contact_email).exists() or
+            ParentAccount.objects.filter(email=contact_email).exists()
+    ):
+        return True
+    else:
+        return False
